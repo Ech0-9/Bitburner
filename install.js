@@ -1,24 +1,24 @@
 const CONF_FILE_NAME = "config.json.txt";
-const BASE_URL = "https://raw.githubusercontent.com/dstack/bitburner-kit/main";
+const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/main";
 const INSTALL_FILES = [
   "config.default.json.txt",
-  "analysis-ignore.txt",
+  /*"analysis-ignore.txt",
   "d_cluster.js",
   "d_contracts.js",
   "d_discovery.js",
   "d_rancher.js",
   "d_scanner.js",
   "d_small-scanner.js",
-  "d_tasker.js",
+  "d_tasker.js",*/
   "r_money.js",
   "r_servers.js",
-  "self_hgw.js",
+  //"self_hgw.js",
   "start.js",
-  "t_grow.js",
-  "t_hack.js",
-  "t_pwn.js",
-  "t_weak.js",
-  "t_xp-farm.js",
+  "t_engorge.js",
+  "t_siphon.js",
+  "t_enthrall.js",
+  "t_enfeeble.js",
+  //"t_xp-farm.js",
   "u_deploy.js",
   "u_find.js",
   "u_lud_speed.js",
@@ -26,7 +26,7 @@ const INSTALL_FILES = [
   "u_peek.js",
   "u_server-buy.js",
   "u_rm-all.js",
-  "util.ContractSolutions.js",
+  //"util.ContractSolutions.js",
   "util.js",
   "util.TextTable.js"
 ];
