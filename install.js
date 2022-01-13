@@ -13,7 +13,7 @@ const INSTALL_FILES = [
   "r_money.js",
   "r_servers.js",
   //"self_hgw.js",
-  "start.js",
+  //"start.js",
   "t_engorge.js",
   "t_siphon.js",
   "t_enthrall.js",
