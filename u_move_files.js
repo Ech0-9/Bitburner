@@ -27,7 +27,7 @@ function deleteDir(fs, ex){
 
 export async function main(ns){
 	const arr = ns.flags([
-		["target", ""],
+		["target", "home"],
 		["ext", false],
 		["create", false],
 		["delete", false]
