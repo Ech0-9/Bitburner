@@ -11,7 +11,7 @@ home; wget https://raw.githubusercontent.com/Ech0-9/Bitburner/main/install.js in
 
 | Port Number | Description           |
 | ----------- | -----------           |
-| 1           | Load_balancer Listner |
+| 1           | Load_balancer Listener|
 | 2           | Load_Balancer Sender  |
 | 3           | Analyzer Listener     |
 | 4           | Analyzer Sender       |
