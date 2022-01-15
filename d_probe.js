@@ -106,6 +106,6 @@ export async function main(ns){
 		//port writing section
 		ns.getPortHandle(1).data[0] = JSON.stringify(serverList);
 		ns.getPortHandle(2).data[0] = JSON.stringify(priority);
-		//ns.sleep(/*some interval maybe*/);
+		//ns.sleep(/*some interval maybe*/);j
 	}
 }
