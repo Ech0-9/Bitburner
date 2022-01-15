@@ -56,7 +56,7 @@ export async function main(ns){
 	let display = [];
 	if(!arr.ext){
 		files.forEach((f, i) => {
-			if(!extensions.includes(f.extension)) extensions.push(f.extension);
+			if(!extensions.includes(f.extension)) { if(f.extension != "EXE") extensions.push(f.extension);}
 		});
 		if(arr.create){
 			makeDir(files, extensions);
