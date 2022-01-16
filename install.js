@@ -15,7 +15,6 @@ const INSTALL_FILES = [
   //"start.js",
   "t_engorge.js",
   "t_extract.js",
-  "t_enthrall.js",
   "t_enfeeble.js",
   "u_move_files.js",
   "u_files.js",
