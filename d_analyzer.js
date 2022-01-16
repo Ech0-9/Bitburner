@@ -22,6 +22,9 @@ export async function main(ns) {
 		
 		return {
 			"hostname": tg,
+			"hackTime": ns.getHackTime(tg),
+			"growTime": ns.getGrowTime(tg),
+			"weakTime": ns.getWeakTime(tg),
 			"hackThreads": t[0],
 			"weakThreads1": t[1],
 			"growThreads": t[2],
@@ -36,6 +39,8 @@ export async function main(ns) {
 		
 		return {
 			"hostname": tg,
+			"growTime": ns.getGrowTime(tg),
+			"weakTime": ns.getWeakTime(tg),
 			"growThreads": t[0],
 			"weakThreads": t[1],
 			"total": total 
