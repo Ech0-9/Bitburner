@@ -2,23 +2,23 @@ const CONF_FILE_NAME = "config.json.txt";
 const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/main";
 const INSTALL_FILES = [
   "config.default.json.txt",
-  /*"analysis-ignore.txt",
-  "d_cluster.js",
-  "d_contracts.js",
-  "d_discovery.js",
-  "d_rancher.js",
-  "d_scanner.js",
-  "d_small-scanner.js",
-  "d_tasker.js",*/
+  "unavailable_server.txt",
+  "d_central_brain.js",
+  "d_probe.js",
+  "d_logistics.js",
+  "d_launcher.js",
+  "d_analyzer.js",
+  "d_primer.js",
+  "d_load_balancer.js",
   "r_money.js",
   "r_servers.js",
-  //"self_hgw.js",
-  //"start.js",
+  "start.js",
   "t_engorge.js",
-  "t_siphon.js",
+  "t_extract.js",
   "t_enthrall.js",
   "t_enfeeble.js",
-  //"t_xp-farm.js",
+  "u_move_files.js",
+  "u_files.js",
   "u_deploy.js",
   "u_find.js",
   "u_lud_speed.js",
@@ -26,7 +26,6 @@ const INSTALL_FILES = [
   "u_peek.js",
   "u_server-buy.js",
   "u_rm-all.js",
-  //"util.ContractSolutions.js",
   "util.js",
   "util.TextTable.js"
 ];
@@ -35,9 +34,10 @@ const INSTALL_ALIAS = [
   `alias nuke="run NUKE.exe"`,
   `alias goto-plaid="run u_lud_speed.js"`,
   `alias start="run start.js"`,
-  `alias hackup="run u_deploy.js --script t_xp-farm.js --target"`,
   `alias editconf="nano config.json.txt"`,
-  `alias peek="run peek.js --port"`
+  `alias peek="run peek.js --port"`,
+  `alias makeDir="run u_move_files.js --create true --ext"`,
+  `alias deleteDir="run u_move_files.js --delete true --ext"`
 ];
 
 function merge(source, target) {
