@@ -2,7 +2,6 @@
 export async function main(ns){
 	const f = ns.flags([]);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
-	if(!ns.hasRootAccess(f._[0])){
 		const availableCrashers = EXECUTABLES.filter((ex) => {
 			return ns.fileExist(ex, "home");
 		});
