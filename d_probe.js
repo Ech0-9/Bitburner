@@ -1,46 +1,45 @@
 import {allservers} from "utils.js";
 
 export async function main(ns){
-	const ALL_SERVERS = allservers(ns, true);
+	//home not included in allservers search. will add after dynamic calculations are over. line 54.
+	const ALL_SERVERS = allservers(ns, false);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
-	const port1 = ns.getPortHandle(1);
-	const port2 = ns.getPortHandle(1);
+	const LBS = ns.getPortHandle(1);
+	const AZS = ns.getPortHandle(2);
+	const PRL = ns.getPortHandle(5);
+	const LL = ns.getPortHandle(7);
 	
 	//will update the given list of servers mRam
-	function updatePServers(cps){
+	function updatePServers(csl, ups){
 		//update home max ram since it is not returned by ns.getPurchasedServers()
-		cps[0].mRam = ns.getServerMaxRam("home");
-		
-		let nps = ns.getPurchasedServers();
-		cps.forEach(c => {
-			let i = nps.findIndex(fi => fi == c.hostname);
-			if(i >= 0){
-				c.mRam = ns.getServerMaxRam(c.hostname);
-				//removes created servers from nps
-				nps.splice(i,1);
-			}
+		csl[0].mRam = ns.getServerMaxRam("home");
+		let i = csl.findIndex(c => {
+			return c.hostname == ups;
 		});
-		
-		//creates servers if any still available
-		if(!nps.empty()){
-			nps.forEach(n => {
-				cps.push({
-					"hostname": n,
-					"root": true,
-					"mRam": ns.getServerMaxRam(n),
-					"threads": ""
-				});
-			});
+		if(i >= 0){
+			csl[i].mRam = ups.mRam;	
+		}
+		else{
+			csl.push(ups);
 		}
 	}
 	
+	let hlvl = 0;
+	let oldPriority = {
+		"hostname": "NOT A SERVER"
+	};
 	let servers = [];
-	let pservers = [{
+	let home = {
 			"hostname": "home",
 			"root": true,
 			"mRam": ns.getServerMaxRam("home"),
 			"threads": "",
-	}];
+			"maxMoney": 0,
+			"minSecurity": 0,
+			"level": 0,
+			"personal": true,
+			"primed": false
+	};
 	
 	servers = ALL_SERVERS.map((as) => {
 		return {
@@ -50,20 +49,28 @@ export async function main(ns){
 			"threads": "",
 			"maxMoney": ns.getServerMaxMoney(as),
 			"minSecurity": ns.getServerMinSecurityLevel(as),
-			"level": ns.getServerRequiredHackingLevel(as)
+			"level": ns.getServerRequiredHackingLevel(as),
+			"personal": false,
+			"primed": false
 		}
-	});
+	}).unshift(home);
+	//places home at the 0 index of servers
 	while(true){
 		//updates list of personal servers with new servers or updated max ram values
-		updatePServers(pservers);
-		
+		if(LL.data[0] != "NULL PORT DATA"){
+			let pu = JSON.parse(LL.data.shift());
+			updatePServers(servers, pu);
+		}
 		//try and rootAccess servers that are hackable (ie ports and level)
 		let availableExe = EXECUTABLES.filter(ex => {
 			return ns.fileExists(ex, "home");
 		});
 		
-		servers.forEach((s) => {
-			if(ns.getHackingLevel() >= s.level && !s.root) {
+		hlvl = ns.getHackingLevel();
+		servers.filter(f => {
+			return !f.personal;
+		}).forEach((s) => {
+			if(hlvl >= s.level && !s.root) {
 				availableExe.forEach((e) => {
 					switch(e) {
 						case "BruteSSH.exe":
@@ -92,20 +99,30 @@ export async function main(ns){
 		
 		//finds servers with root access
 		let rootServers = servers.filter(s => {
-			return s.root);
+			if(s.root) return s;
 		});
 		
 		//make array with all unowned servers with rootAccess and personal servers
-		let serverList = rootServers.concat(pservers);
+		//copy made due to max money sort later to find priority.
+		let serverList = rootServers;
 		
 		//sorts list to highest max money server.
 		let priority = rootServers.sort((a, b) => { 
 			return b.maxMoney - a.maxMoney;
 		}).shift();
 		
+		//priority primed check
+		if(PRL.data[0] != "NULL PORT DATA"){
+			let p = JSON.parse(PRL.data.shift());
+			if(priority.hostname == p.hostname){
+				priority.primed = p.primed;
+			}
+		}
+		
+		
 		//port writing section
-		ns.getPortHandle(1).data[0] = JSON.stringify(serverList);
-		ns.getPortHandle(2).data[0] = JSON.stringify(priority);
+		LBS.data[0] = JSON.stringify(serverList);
+		AZS.data[0] = JSON.stringify(priority);
 		//ns.sleep(/*some interval maybe*/);j
 	}
 }
