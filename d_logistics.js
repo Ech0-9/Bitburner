@@ -58,7 +58,7 @@ export async function main(ns){
 				await ns.scp("t_engorge.js", "home", pserv[0]);
 				await ns.scp("t_enfeeble.js", "home", pserv[0]);
 				await ns.scp("t_extract.js", "home", pserv[0]);
-				LBL.data.shift();
+				LBL.data.splice(0, 2);
 				
 			}
 			let ups = {
