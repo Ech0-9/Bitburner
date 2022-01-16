@@ -13,37 +13,52 @@ export async function main(ns) {
 	function sum(a,b) {
 		return a + b;	
 	}
-	function batch_analyze(t, w, c, tg){
-		t[0] = Math.floor(.1 / ns.hackAnalyze(tg));
-		t[1] = Math.ceil((hst * t[0]) / w);
-		t[2] = ns.growthAnalyze(tg, gmul, c);
-		t[3] = Math.ceil((gst * t[2]) / w);
-		let total = t.reduce(sum, 0);
+	function batch_analyze(t1, t2, w1, w2, gm1, gm2, c, tg){
+		t1[0] = Math.floor(.1 / ns.hackAnalyze(tg));
+		t2[0] = t1[0];
+		t1[1] = Math.ceil((hst * t1[0]) / w1);
+		t2[1] = Math.ceil((hst * t1[0]) / w2);
+		t1[2] = ns.growthAnalyze(tg, gm1, 1);
+		t2[2] = ns.growthAnalyze(tg, gm2, c);
+		t1[3] = Math.ceil((gst * t1[2]) / w1);
+		t2[3] = Math.ceil((gst * t2[2]) / w2);
+		let total = t1.reduce(sum, 0);
+		let total_home = t2.reduce(sum, 0);
 		
 		return {
 			"hostname": tg,
 			"hackTime": ns.getHackTime(tg),
 			"growTime": ns.getGrowTime(tg),
 			"weakTime": ns.getWeakTime(tg),
-			"hackThreads": t[0],
-			"weakThreads1": t[1],
-			"growThreads": t[2],
-			"weakThreads2": t[3],
-			"total": total 
+			"hackThreads": t1[0],
+			"h_weakThreads": t1[1],
+			"h_weakThreads_home": t2[1],
+			"growThreads": t1[2],
+			"growThreads_home": t2[2],
+			"g_weakThreads": t1[3],
+			"g_weakThreads_home": t2[3],
+			"total": total,
+			"total_home": total_home
 		};
 	}
-	function prime_analyze(t, w, c, tg, gm){
-		t[0] = ns.growthAnalyze(tg, gm, c);
-		t[1] = Math.ceil((gst * t[0]) / w);
-		let total = t.reduce(sum,0);
+	function prime_analyze(t1, t2, w1, w2, gm1, gm2, c, tg){
+		t1[0] = ns.growthAnalyze(tg, gm1, 1);
+		t2[0] = ns.growthAnalyze(tg, gm2, c);
+		t1[1] = Math.ceil((gst * t1[0]) / w1);
+		t2[1] = Math.ceil((gst * t2[0]) / w2);
+		let total = t1.reduce(sum,0);
+		let total_home = t2.reduce(sum,0);
 		
 		return {
 			"hostname": tg,
 			"growTime": ns.getGrowTime(tg),
 			"weakTime": ns.getWeakTime(tg),
-			"growThreads": t[0],
-			"weakThreads": t[1],
-			"total": total 
+			"growThreads": t1[0],
+			"growThreads_home": t2[0],
+			"g_weakThreads": t1[1],
+			"g_weakThreads_home": t2[1],
+			"total": total,
+			"total_home": total_home
 		};
 	}
 	
@@ -55,27 +70,18 @@ export async function main(ns) {
 		
 		//batch analysis section
 		let threads = [0,0,0,0];
-		let batch_analysis = batch_analyze(threads, wst, 1, target);
-		
-		//batch Home analysis section
-		threads = [0,0,0,0];
-		let batch_home = batch_analyze(threads, wsth, 2, target);
-		
-		let batch = [batch_analysis, batch_home];
-		
+		let threads_home = [0,0,0,0];
+		let batch_analysis = batch_analyze(threads, threads_home, wst, wsth, gmul, gpmul, 2, target);
+	
 		//prime analysis section
 		threads = [0,0];
-		let prime_analysis = prime_analyze(threads, wst, 1, target, gmul);
+		threads_home = [0,0];
+		let prime_analysis = prime_analyze(threads, threads_home, wst, wsth, gmul, gpmul, 2, target);
 		
-		//prime home section
-		threads = [0,0];
-		let prime_home = prime_analyze(threads, wsth, 2, target, gpmul);
-		
-		let prime = [prime_analysis, prime_home];
 		
 		PrBtS.data[0] = JSON.stringify(priority);
-		PrBtS.data[1] = JSON.stringify(batch);
-		PrBtS.data[2] = JSON.stringify(prime);
+		PrBtS.data[1] = JSON.stringify(batch_analysis);
+		PrBtS.data[2] = JSON.stringify(prime_analysis);
 		//ns.sleep(some interval?);
 	
 	}
