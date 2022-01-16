@@ -1,20 +1,14 @@
 {
-  "daemonInterval": 100,
-  "targetMoneyThreshold": 0.75,
-  "targetMoneyTakeThreshold": 0.75,
-  "targetMaxSecurity": 15,
-  "targetMaxOverMinSecurity": 5,
-  "runDiscoveryDaemon": true,
-  "runTaskerDaemon": true,
-  "runScannerDaemon": true,
-  "runContractorDaemon": false,
-  "runRancherDaemon": false,
-  "runXpFarmDaemon": false,
-  "servers":{
+  "interval": 100,
+  "runProbe": true,
+  "runAnalyzer": false,
+  "runLoadBalancer": false,
+  "runPrimer": false,
+  "runBatcher": false,
+  "runLogistics": false,
+  "pservers":{
     "prefix": "p-cloud",
-    "minSize": 6,
-    "minServerCount": 2,
-    "targetServerSize": 18
+    "minSize": 8,
   },
   "reservedRAM": {
     "home": 64
