@@ -3,8 +3,10 @@
   "runProbe": true,
   "runAnalyzer": false,
   "runLoadBalancer": false,
-  "runPrimer": false,
-  "runBatcher": false,
+  "runPrimerLB": false,
+  "runPrimerAZ": false,
+  "runBatcherLB": false,
+  "runBatcherAZ": false,
   "runLogistics": false,
   "pservers":{
     "prefix": "p-cloud",
