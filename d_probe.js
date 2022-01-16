@@ -112,7 +112,7 @@ export async function main(ns){
 		let priority = rootServers.sort((a, b) => { 
 			return b.maxMoney - a.maxMoney;
 		}).shift();
-		priority.avaMoney = ns.getServerAvailableMoney(priority.hostname);
+		priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
 		//priority primed check
 		if(PRL.data[0] != "NULL PORT DATA"){
 			let p = JSON.parse(PRL.data.shift());
