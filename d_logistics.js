@@ -36,7 +36,8 @@ export async function main(ns){
 			}
 			else{
 				
-				await ns.scp(marker, "home", pserv[0]);
+				//await ns.scp(marker, "home", pserv[0]);
+				LBL.data[1] = pserv[0];
 				while(ns.getServerUsedRam(pserv[0]) != 0){
 					await ns.sleep(10000);
 				}
