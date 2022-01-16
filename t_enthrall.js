@@ -1,33 +1,31 @@
 /** @Param {NS} ns **/
-const GATE_CRASHERS = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
 export async function main(ns){
-	const f = ns.flags([
-		["target", ""]
-		]);
-	if(!hasRootAccess(f.target)){
-		const availableCrashers = GATE_CRASHERS.filter((gc) => {
-			return ns.fileExist(gc, "home");
+	const f = ns.flags([]);
+	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
+	if(!ns.hasRootAccess(f._[0])){
+		const availableCrashers = EXECUTABLES.filter((ex) => {
+			return ns.fileExist(ex, "home");
 		});
 		availableCrashers.forEach((ac) => {
 			switch(ac){
 				case "BruteSSH.exe":
-					ns.brutessh(f.target);
+					ns.brutessh(f._[0]);
 					break;
 				case "FTPCrack.exe":
-					ns.ftpcrack(f.target);
+					ns.ftpcrack(f._[0]);
 					break;
 				case "relaySMTP.exe":
-					ns.relaysmtp(f.target);
+					ns.relaysmtp(f._[0]);
 					break;
 				case "HTTPWorm.exe": 
-					ns.httpworm(f.target);
+					ns.httpworm(f._[0]);
 					break;
 				case "SQLInject.exe":
-					ns.sqlinject(f.target);
+					ns.sqlinject(f._[0]);
 					break;					
 			}
 		});
-		ns.nuke(f.target);
+		ns.nuke(f._[0]);
 		
 		//write to port# ?
 }
