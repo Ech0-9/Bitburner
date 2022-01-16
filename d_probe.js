@@ -57,6 +57,23 @@ export async function main(ns){
 		}
 	}).unshift(home);
 	//places home at the 0 index of servers
+	
+	let pservers = ns.getPurchasedServers().map(s => {
+			return {
+				"hostname": s,
+				"root": true,
+				"mRam": ns.getServerMaxRam(s),
+				"threads": "",
+				"maxMoney": 0,
+				"avaMoney": 0,
+				"minSecurity": 0,
+				"level": 0,
+				"personal": true,
+				"primed": false
+			}
+	});
+	
+	servers = servers.concat(pservers);
 	while(true){
 		const CONFIG = getConfig(ns);
 		//updates list of personal servers with new servers or updated max ram values
