@@ -37,7 +37,9 @@ const INSTALL_ALIAS = [
   `alias editconf="nano config.json.txt"`,
   `alias peek="run peek.js --port"`,
   `alias makeDir="run u_move_files.js --create true --ext"`,
-  `alias deleteDir="run u_move_files.js --delete true --ext"`
+  `alias deleteDir="run u_move_files.js --delete true --ext"`,
+  `alias update="run install.js"`,
+  `alias install="run install.js"`
 ];
 
 function merge(source, target) {
