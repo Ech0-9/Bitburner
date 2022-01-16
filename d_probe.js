@@ -1,4 +1,4 @@
-import {allservers} from "utils.js";
+import {allservers,getConfig,setConfig} from "utils.js";
 
 export async function main(ns){
 	//home not included in allservers search. will add after dynamic calculations are over. line 54.
@@ -58,6 +58,7 @@ export async function main(ns){
 	}).unshift(home);
 	//places home at the 0 index of servers
 	while(true){
+		const CONFIG = getConfig(ns);
 		//updates list of personal servers with new servers or updated max ram values
 		if(LL.data[0] != "NULL PORT DATA"){
 			let pu = JSON.parse(LL.data.shift());
@@ -125,6 +126,8 @@ export async function main(ns){
 		//port writing section
 		LBS.data[0] = JSON.stringify(serverList);
 		AZS.data[0] = JSON.stringify(priority);
-		//ns.sleep(/*some interval maybe*/);j
+		if(!CONFIG.runLoadBalancer) setConfig(ns, {"runLoadBalancer": true});
+		if(!CONFIG.runAnalyzer) setConfig(ns, {"runAnalyzer": true});
+		await ns.sleep(CONFIG.interval);
 	}
 }
