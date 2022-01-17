@@ -1,4 +1,4 @@
-import {getConfig, setConfig} from "util.js";
+import {getConfig} from "util.js";
 import {prime} from "u_functions.js";
 
 export async function main(ns){	
