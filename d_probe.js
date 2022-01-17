@@ -116,9 +116,16 @@ export async function main(ns){
 	while(true){
 		CONFIG = getConfig(ns);
 		//updates list of personal servers with new servers or updated max ram values
-		if(LL.data[0] != "NULL PORT DATA"){
-			let pu = JSON.parse(LL.data.shift());
-			updatePServers(servers, pu);
+		try{
+			//LL.peek()
+			if(LL.data[0] != "NULL PORT DATA"){
+				let pu = JSON.parse(LL.data.shift());
+				updatePServers(servers, pu);
+			}
+		}
+		catch{
+			ns.tprint("Server Update Missing");
+			ns.exit()
 		}
 		//try and rootAccess servers that are hackable (ie ports and level)
 		let availableExe = EXECUTABLES.filter(ex => {
@@ -157,6 +164,7 @@ export async function main(ns){
 			}
 		}
 		*/
+		try{
 		servers.filter(f => {
 			return !f.personal;
 		}).forEach((s) => {
@@ -186,6 +194,11 @@ export async function main(ns){
 				}
 			}
 		});
+		}
+		catch{
+			ns.tprint("Issue with Server Cracking");
+			ns.exit()
+		}
 		
 		//finds servers with root access
 		let rootServers = servers.filter(s => {
@@ -202,19 +215,29 @@ export async function main(ns){
 		}).shift();
 		priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
 		//priority primed check
+		try{
 		if(PRL.data[0] != "NULL PORT DATA"){
 			let p = JSON.parse(PRL.data.shift());
 			if(priority.hostname == p.hostname){
 				priority.primed = p.primed;
 			}
 		}
+		}
+		catch{
+			ns.tprint("Issue with Prime listener data");	
+		}
 		
-		
+		try{
 		//port writing section
 		LBS.data[0] = JSON.stringify(serverList);
 		AZS.data[0] = JSON.stringify(priority);
 		if(!CONFIG.runLoadBalancer) await setConfig(ns, {"runLoadBalancer": true});
 		if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
 		await ns.sleep(CONFIG.interval);
+		}
+		catch{
+			ns.tprint("unable to write data to port");
+			ns.exit();
+		}
 	}
 }
