@@ -1,5 +1,6 @@
 {
   "interval": 100,
+  "percentage": .1,
   "runProbe": true,
   "runAnalyzer": false,
   "runLoadBalancer": false,
