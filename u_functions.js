@@ -55,18 +55,6 @@ export function prime(ns, s, azp, tg, d, i){
 		prime(ns, s, azp, tg, d, i);	
 	}
 }
-export function concat2(a, b){
-	let c = [];
-	let len = a.length + b.length;
-	for(let i = 0; i < len; i++){
-		if(a.length != 0){
-			c.push(a.shift());
-		}
-		else{
-			c.push(b.shift());	
-		}
-	}
-}
 export function concat(a, b){
 	let c = new Array(a.length + b.length);
 	for(let i = 1, j = 1, k = 1; i <= c.length; i++){
