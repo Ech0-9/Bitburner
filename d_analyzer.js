@@ -83,8 +83,8 @@ export async function main(ns) {
 		PrBtS.data[0] = JSON.stringify(priority);
 		PrBtS.data[1] = JSON.stringify(batch_analysis);
 		PrBtS.data[2] = JSON.stringify(prime_analysis);
-		if(!CONFIG.runPrimer) setConfig(ns, {"runPrimer": true});
-		if(!CONFIG.runBatcher) setConfig(ns, {"runBatcher": true});
+		if(!CONFIG.runPrimer) await setConfig(ns, {"runPrimer": true});
+		if(!CONFIG.runBatcher) await setConfig(ns, {"runBatcher": true});
 		await ns.sleep(INTERVAL);
 	
 	}
