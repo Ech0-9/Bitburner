@@ -33,8 +33,8 @@ export async function main(ns) {
 			}
 			PRBTS.data[0] = JSON.stringify(rootServers);
 			
-			if(!CONFIG.runBatcherLB) setConfig(ns, {"runBatcherLB": true});
-			if(!CONFIG.runLogistics) setConfig(ns, {"runLogistics": true});
+			if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
+			if(!CONFIG.runLogistics) await setConfig(ns, {"runLogistics": true});
 			await ns.sleep(INTERVAL);
 			
 		}
