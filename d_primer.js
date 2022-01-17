@@ -8,11 +8,8 @@ export async function main(ns){
 	let servers = [];
 	let AZP = {};
 	let ptarget = {};
-	function sumAva(a,b){
+	function sum(a,b){
 		return a.threads + b.threads;	
-	}
-	function sumM(a,b){
-		return a.mRam + b.mRam;	
 	}
 	while(true){
 		while(LBL.data[0] != "NULL PORT DATA" && AZL.data[0] != "NULL PORT DATA"){
@@ -23,7 +20,7 @@ export async function main(ns){
 			PRS.data[0] = JSON.strigifiy(ptarget.primed);
 			AZP = JSON.parse(AZL.data[2]);
 			servers = JSON.parse(LBL.data[0]);
-			let aRam = servers.reduce(sumAva, 0);
+			let aRam = servers.reduce(sum, 0);
 			if(!ptarget.primed){
 				let div = 0;
 				if(aRam != 0){
