@@ -1,7 +1,5 @@
 /** @Param {NS} ns **/
 export async function main(ns){
-	const f = [
-		["target", ""]
-		]);
-	let result = await ns.weaken(f.target/*, threads*/);
+	const f = ns.flags([]);
+	let result = await ns.weaken(f._[0]);
 }
