@@ -14,7 +14,7 @@ export async function main(ns){
 	while(true){
 		if(cycle > 20){
 			ns.toast("Max Server Upgrade acheived!!", "warning", 15000);
-			setConfig(ns, {"runLogistics": false});
+			await setConfig(ns, {"runLogistics": false});
 			ns.exit()
 		}
 		while(LBL.data[0] != "NULL PORT DATA"){
