@@ -12,7 +12,7 @@
   "runLogistics": false,
   "pservers":{
     "prefix": "p-cloud",
-    "minSize": 8,
+    "minSize": 8
   },
   "reservedRAM": {
     "home": 64
