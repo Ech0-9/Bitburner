@@ -6,7 +6,7 @@ export async function main(ns) {
 	const wst = 0.05;
 	//percent increase to get back to 100% max money from 100% - CONFIG.percentage max money.
 	const PBL = ns.getPortHandle(2);
-	//sends data to both Primer and Batch. Format is [PT, [BA, BH] , [PA, PH]].
+	//sends data to both Primer and Batch. Format is [PT, BA, PA]
 	const PrBtS = ns.getPortHandle(4);
 	function sum(a,b) {
 		return a + b;	
