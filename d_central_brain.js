@@ -101,5 +101,3 @@ export async function main(ns){
 		}
 		await ns.sleep(INTERVAL * 10);
 		*/
-	}
-}
