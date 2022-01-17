@@ -1,12 +1,10 @@
 import {getConfig} from "util.js";
 
 export async function main(ns) {
-	const CONFIG = getConfig(ns);
 	const hst = 0.002;
 	const gst = 0.004;
 	const wst = 0.05;
-	//percent increase to get back to 100% max money from 90% max money.
-	const gmul = 1.12;
+	//percent increase to get back to 100% max money from 100% - CONFIG.percentage max money.
 	const PBL = ns.getPortHandle(2);
 	//sends data to both Primer and Batch. Format is [PT, [BA, BH] , [PA, PH]].
 	const PrBtS = ns.getPortHandle(4);
@@ -63,6 +61,8 @@ export async function main(ns) {
 	}
 	
 	while(true){
+		const CONFIG = getConfig(ns);	
+		const gmul = 1 / (1 - CONFIG.percentage);
 		let priority = JSON.parse(PBL.data[0]);
 		let target = priority.hostname;
 		//let wsth = ns.weakenAnalyze(1, 2);
