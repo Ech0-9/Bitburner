@@ -39,23 +39,23 @@ export async function main(ns){
 		}
 		//checks Batcher
 		if(ns.scriptRunning("d_batcher.js", ME)){
-			if(!CONFIG.runBatcher){
+			if(!CONFIG.runBatcherLB  || !CONFIG.runBatcherAZ){
 				ns.scriptKill("d_batcher.js", ME);
 			}
 		}
 		else {
-			if(CONFIG.runBatcher){
+			if(CONFIG.runBatcherLB && CONFIG.runBatcherAZ){
 				ns.run("d_batcher.js", 1);
 			}
 		}
 		
 		if(ns.scriptRunning("d_primer.js", ME)){
-			if(!CONFIG.runPrimer){
+			if(!CONFIG.runPrimerLB || !CONFIG.runPrimerAZ){
 				ns.scriptKill("d_primer.js", ME);
 			}
 		}
 		else {
-			if(CONFIG.runPrimer){
+			if(CONFIG.runPrimerLB && CONFIG.runPrimerAZ){
 				ns.run("d_primer.js", 1);
 			}
 		}
