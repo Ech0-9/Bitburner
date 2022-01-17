@@ -31,6 +31,7 @@ export async function main(ns){
 		"hostname": "NOT A SERVER"
 	};
 	let servers = [];
+	let pservers = [];
 	let home = {
 			"hostname": "home",
 			"root": true,
@@ -44,7 +45,23 @@ export async function main(ns){
 			"primed": false
 	};
 	
-	servers = ALL_SERVERS.map((as) => {
+	for(let i = 0; i < ALL_SERVERS.length; i++){
+		let as = ALL_SERVERS[i];
+		let a = {
+				"hostname": as,
+				"root": false,
+				"mRam": ns.getServerMaxRam(as),
+				"threads": "",
+				"maxMoney": ns.getServerMaxMoney(as),
+				"avaMoney": 0,
+				"minSecurity": ns.getServerMinSecurityLevel(as),
+				"level": ns.getServerRequiredHackingLevel(as),
+				"personal": false,
+				"primed": false
+			}
+		servers.push(a);
+	}
+	/*servers = ALL_SERVERS.map((as) => {
 		return {
 			"hostname": as,
 			"root": false,
@@ -57,10 +74,30 @@ export async function main(ns){
 			"personal": false,
 			"primed": false
 		}
-	}).unshift(home);
-	//places home at the 0 index of servers
+	});
 	
-	let pservers = ns.getPurchasedServers().map(s => {
+	servers.unshift(home);
+	*/
+	
+	//places home at the 0 index of servers
+	let nps = ns.getPurchasedServers();
+	for(let i = 0; i <  nps.length; i++){
+		let s = nps[i];
+		let a = {
+				"hostname": s,
+				"root": true,
+				"mRam": ns.getServerMaxRam(s),
+				"threads": "",
+				"maxMoney": 0,
+				"avaMoney": 0,
+				"minSecurity": 0,
+				"level": 0,
+				"personal": true,
+				"primed": false
+			}
+		pservers.push(a);
+	}
+	/*pservers = nps.map((s) => {
 			return {
 				"hostname": s,
 				"root": true,
@@ -73,7 +110,7 @@ export async function main(ns){
 				"personal": true,
 				"primed": false
 			}
-	});
+	});*/
 	
 	servers = servers.concat(pservers);
 	while(true){
@@ -89,6 +126,37 @@ export async function main(ns){
 		});
 		
 		hlvl = ns.getHackingLevel();
+		/*
+		let fservers = servers.filter(f => {
+			return !f.personal;
+		});
+		for(let i = 0; i < fservers.length; i++){
+			if(hlvl >= fservers[i].level && !fservers[i].root) {
+				for(let j = 0; j < availableExe.length; j++){
+					switch(availableExe[i]) {
+						case "BruteSSH.exe":
+							ns.brutessh(s);
+							break;
+						case "FTPCrack.exe":
+							ns.ftpcrack(s);
+							break;
+						case "relaySMTP.exe":
+							ns.relaysmtp(s);
+							break;
+						case "HTTPWorm.exe":
+							ns.httpworm(s);
+							break;
+						case "SQLInject.exe":
+							ns.sqlinject(s);
+							break;
+					}	
+				}
+				ns.nuke(fservers[i]);
+				if(ns.hasRootAccess){
+					fservers[i].root = true;
+			}
+		}
+		*/
 		servers.filter(f => {
 			return !f.personal;
 		}).forEach((s) => {
