@@ -1,4 +1,4 @@
-import {getConfig} from "util.js";
+import {getConfig, setConfig} from "util.js";
 
 export async function main(ns) {
 	const hst = 0.002;
@@ -61,7 +61,8 @@ export async function main(ns) {
 	}
 	
 	while(true){
-		const CONFIG = getConfig(ns);	
+		const CONFIG = getConfig(ns);
+		const INTERVAL = CONFIG.interval;
 		const gmul = 1 / (1 - CONFIG.percentage);
 		let priority = JSON.parse(PBL.data[0]);
 		let target = priority.hostname;
@@ -82,7 +83,9 @@ export async function main(ns) {
 		PrBtS.data[0] = JSON.stringify(priority);
 		PrBtS.data[1] = JSON.stringify(batch_analysis);
 		PrBtS.data[2] = JSON.stringify(prime_analysis);
-		//ns.sleep(some interval?);
+		if(!CONFIG.runPrimer) setConfig(ns, {"runPrimer": true});
+		if(!CONFIG.runBatcher) setConfig(ns, {"runBatcher": true});
+		await ns.sleep(INTERVAL);
 	
 	}
 }
