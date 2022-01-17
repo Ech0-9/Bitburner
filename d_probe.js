@@ -1,8 +1,8 @@
-import {allservers,getConfig,setConfig} from "util.js";
+import {allServers,getConfig,setConfig} from "util.js";
 
 export async function main(ns){
 	//home not included in allservers search. will add after dynamic calculations are over. line 54.
-	const ALL_SERVERS = allservers(ns, false);
+	const ALL_SERVERS = allServers(ns, false);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
 	let CONFIG = getConfig(ns);
 	let reserved = CONFIG.reservedRAM.home;
