@@ -1,4 +1,4 @@
-import {allservers,getConfig,setConfig} from "utils.js";
+import {allservers,getConfig,setConfig} from "util.js";
 
 export async function main(ns){
 	//home not included in allservers search. will add after dynamic calculations are over. line 54.
