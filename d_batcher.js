@@ -26,14 +26,17 @@ export async function main(ns) {
 			AZB = JSON.parse(AZL.data[1]);
 			servers = JSON.parse(LBL.data[0]);
 			
-			let aRam = servers.reduce(sum, 0);	
-			
-			if(aRam < AZB.total) {
+			let aRam = servers.reduce(sum, 0);
+			let div = 0;
+			if(aRam != 0){
+				div = Math.ceil(AZB.total / aRam);
+			}
+			if(div > 2 || div == 0) {
 				await ns.sleep(INTERVAL);
 				continue;
 			}
 			else{
-				batch(ns, servers, AZB, ptarget.hostname);
+				batch(ns, servers, AZB, ptarget.hostname, div, 0);
 				await ns.sleep(INTERVAL);
 			}
 			
