@@ -4,6 +4,7 @@ export async function main(ns){
 	const ME = ns.getHostname();	
 	while(true){
 		const CONFIG = getConfig(ns);
+		const INTERVAL = CONFIG.interval;
 		//checks if Probe should/n't be running
 		if(ns.scriptRunning("d_probe.js", ME)){
 			if(!CONFIG.runProbe){
@@ -70,5 +71,6 @@ export async function main(ns){
 				ns.run("d_logistics.js", 1);
 			}
 		}
+		await ns.sleep(INTERVAL * 10);
 	}
 }
