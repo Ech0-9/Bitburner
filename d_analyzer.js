@@ -7,7 +7,7 @@ export async function main(ns) {
 	//percent increase to get back to 100% max money from 100% - CONFIG.percentage max money.
 	const PBL = ns.getPortHandle(2);
 	//sends data to both Primer and Batch. Format is [PT, BA, PA]
-	const PrBtS = ns.getPortHandle(4);
+	const PRBTS = ns.getPortHandle(4);
 	function sum(a,b) {
 		return a + b;	
 	}
@@ -80,9 +80,9 @@ export async function main(ns) {
 		let prime_analysis = prime_analyze(threads, wst, gmul, target);
 		
 		
-		PrBtS.data[0] = JSON.stringify(priority);
-		PrBtS.data[1] = JSON.stringify(batch_analysis);
-		PrBtS.data[2] = JSON.stringify(prime_analysis);
+		PRBTS.data[0] = JSON.stringify(priority);
+		PRBTS.data[1] = JSON.stringify(batch_analysis);
+		PRBTS.data[2] = JSON.stringify(prime_analysis);
 		if(!CONFIG.runPrimer) await setConfig(ns, {"runPrimer": true});
 		if(!CONFIG.runBatcher) await setConfig(ns, {"runBatcher": true});
 		await ns.sleep(INTERVAL);
