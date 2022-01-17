@@ -32,9 +32,9 @@ function hgw(ns, ty, s, t, az, tg){
 		ns.exec(SCRIPTS[i], ss.hostname, ss.threads, [tg, d]);
 	}
 }
-export function batch(s, azb, tg){
-			hgw("HACK", s, azb.hackThreads, azb, tg);
-			hgw("WEAK", s, azb.h_weakThreads, azb, tg);
-			hgw("GROW", s, azb.growThreads, azb, tg);
-			hgw("WEAK", s, azb.g_weakThreads, azb, tg);
+export function batch(ns, s, azb, tg){
+			hgw(ns, "HACK", s, azb.hackThreads, azb, tg);
+			hgw(ns, "WEAK", s, azb.h_weakThreads, azb, tg);
+			hgw(ns, "GROW", s, azb.growThreads, azb, tg);
+			hgw(ns, "WEAK", s, azb.g_weakThreads, azb, tg);
 		}
