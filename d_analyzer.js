@@ -63,7 +63,7 @@ export async function main(ns) {
 	while(true){
 		const CONFIG = getConfig(ns);
 		const INTERVAL = CONFIG.interval;
-		const gmul = 1 / (1 - CONFIG.percentage);
+		const gmul = 100 / (100 - CONFIG.percentage);
 		let priority = JSON.parse(PBL.data[0]);
 		let target = priority.hostname;
 		//let wsth = ns.weakenAnalyze(1, 2);
