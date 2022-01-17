@@ -4,6 +4,8 @@ export async function main(ns){
 	//home not included in allservers search. will add after dynamic calculations are over. line 54.
 	const ALL_SERVERS = allservers(ns, false);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
+	let CONFIG = getConfig(ns);
+	let reserved = CONFIG.reservedRAM.home;
 	const LBS = ns.getPortHandle(1);
 	const AZS = ns.getPortHandle(2);
 	const PRL = ns.getPortHandle(5);
@@ -12,7 +14,7 @@ export async function main(ns){
 	//will update the given list of servers mRam
 	function updatePServers(csl, ups){
 		//update home max ram since it is not returned by ns.getPurchasedServers()
-		csl[0].mRam = ns.getServerMaxRam("home");
+		csl[0].mRam = ns.getServerMaxRam("home") - reserved;
 		let i = csl.findIndex(c => {
 			return c.hostname == ups;
 		});
@@ -32,7 +34,7 @@ export async function main(ns){
 	let home = {
 			"hostname": "home",
 			"root": true,
-			"mRam": ns.getServerMaxRam("home"),
+			"mRam": ns.getServerMaxRam("home") - reserved,
 			"threads": "",
 			"maxMoney": 0,
 			"avaMoney": 0,
@@ -75,7 +77,7 @@ export async function main(ns){
 	
 	servers = servers.concat(pservers);
 	while(true){
-		const CONFIG = getConfig(ns);
+		CONFIG = getConfig(ns);
 		//updates list of personal servers with new servers or updated max ram values
 		if(LL.data[0] != "NULL PORT DATA"){
 			let pu = JSON.parse(LL.data.shift());
