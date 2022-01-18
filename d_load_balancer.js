@@ -45,7 +45,7 @@ export async function main(ns) {
 
 			//if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
 			//if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
-			//if(!CONFIG.runLogistics) await setConfig(ns, {"runLogistics": true});
+			//if(!CONFIG.runLogisticsST && !CONFIG.runLogisticsFN) await setConfig(ns, {"runLogistics": true});
 
 			await ns.sleep(INTERVAL);
 
