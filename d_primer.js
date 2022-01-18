@@ -5,6 +5,9 @@ export async function main(ns){
 	const LBL = ns.getPortHandle(3);
 	const AZL = ns.getPortHandle(4);
 	const PRS = ns.getPortHandle(5);
+	let oldPriority = {
+		"hostname": "NOT A SERVER"
+	};
 	let servers = [];
 	let AZP = {};
 	let ptarget = {};
@@ -19,8 +22,14 @@ export async function main(ns){
 			//upates priority target
 			ptarget = JSON.parse(AZL.peek())[0];
 			//sends true or false to probe and batcher
-			PRS.read();
-			PRS.write(JSON.stringify(ptarget.primed));
+			if(PRS.peek() == "NULL PORT DATA"){
+				PRS.write(JSON.stringify(ptarget.primed));
+			}
+			if(ptarget.hostname != oldPriority.hostname){
+				PRS.read();
+				PRS.write(JSON.stringify(ptarget.primed));
+			}
+			oldPriority = ptarget;
 			//
 			AZP = JSON.parse(AZL.peek())[2];
 			servers = JSON.parse(LBL.peek());
