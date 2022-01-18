@@ -23,11 +23,11 @@ export async function main(ns){
 			ptarget = JSON.parse(AZL.peek())[0];
 			//sends true or false to probe and batcher
 			if(PRS.peek() == "NULL PORT DATA"){
-				PRS.write(JSON.stringify(ptarget.primed));
+				PRS.write(ptarget.primed);
 			}
 			if(ptarget.hostname != oldPriority.hostname){
 				PRS.read();
-				PRS.write(JSON.stringify(ptarget.primed));
+				PRS.write(ptarget.primed);
 			}
 			oldPriority = ptarget;
 			//
