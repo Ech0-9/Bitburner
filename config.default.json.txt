@@ -10,7 +10,7 @@
   "runBatcherAZ": false,
   "runBatcherPR": false,
   "runLogisticsST": false,
-  "runLogisticsFN": true,
+  "runLogisticsFN": false,
   "pservers":{
     "prefix": "p-cloud",
     "minSize": 8
