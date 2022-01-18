@@ -28,8 +28,7 @@ export async function main(ns){
 					purchased = ns.purchaseServer(CONFIG.pservers.prefix, ram);
 					delay = 10000;
 				} while(purchased != "");
-				
-				await ns.scp("t_enthrall.js", "home", purchased);
+				ns.toast(`Purchased New Server: ${purchased} RAM: ${ram}`, "success", 4000);
 				await ns.scp("t_engorge.js", "home", purchased);
 				await ns.scp("t_enfeeble.js", "home", purchased);
 				await ns.scp("t_extract.js", "home", purchased);
@@ -49,13 +48,13 @@ export async function main(ns){
 					purchased = ns.purchaseServer(pserv[0], ram);
 					delay = 10000;
 				} while(purchased != "")
+				ns.toast(`Upgraded Server: ${purchased} RAM: ${ram}`, "success", 4000);
 				counter++;
 				if(counter == 25){
 					counter = 0;
 					cycle++;
 					pow++;
 				}
-				await ns.scp("t_enthrall.js", "home", pserv[0]);
 				await ns.scp("t_engorge.js", "home", pserv[0]);
 				await ns.scp("t_enfeeble.js", "home", pserv[0]);
 				await ns.scp("t_extract.js", "home", pserv[0]);
