@@ -19,7 +19,7 @@ export async function main(ns) {
 	while (true) {
 		const CONFIG = getConfig(ns);
 		const INTERVAL = CONFIG.interval;
-		while (PBL.peek() != "NULL PORT DATA") {
+		if(PBL.peek() != "NULL PORT DATA") {
 			let rootServers = JSON.parse(PBL.read());
 			for (let i = 0; i < rootServers.length; i++) {
 				let rs = rootServers[i];
@@ -40,12 +40,9 @@ export async function main(ns) {
 			PRBTS.read();
 			PRBTS.write(JSON.stringify(rootServers));
 
-			//if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
-			//if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
-			//if(!CONFIG.runLogisticsST && !CONFIG.runLogisticsFN) await setConfig(ns, {"runLogistics": true});
-
-			await ns.sleep(INTERVAL);
-
+			if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
+			if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
+			if(!CONFIG.runLogisticsST && !CONFIG.runLogisticsFN) await setConfig(ns, {"runLogisticsST": true});
 		}
 		await ns.sleep(INTERVAL);
 	}
