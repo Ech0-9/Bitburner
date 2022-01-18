@@ -1,7 +1,7 @@
 import {getConfig, setConfig} from "util.js";
 
 export async function main(ns){
-	const marker = "unavailable_server.txt";
+	//const marker = "unavailable_server.txt";
 	const LBL = ns.getPortHandle(6);
 	const LBS = ns.getPortHandle(8);
 	const PBS = ns.getPortHandle(7);
