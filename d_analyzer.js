@@ -69,7 +69,7 @@ export async function main(ns) {
 			PRBTS.read();
 			PRBTS.write(JSON.stringify(load));
 			if(!CONFIG.runPrimerAZ) await setConfig(ns, {"runPrimerAZ": true});
-			if(!CONFIG.runBatcherAZ) await setConfig(ns, {"runBatcherAZ": true});
+			//if(!CONFIG.runBatcherAZ) await setConfig(ns, {"runBatcherAZ": true});
 		}
 		await ns.sleep(INTERVAL);
 	}
