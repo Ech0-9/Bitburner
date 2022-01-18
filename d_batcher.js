@@ -9,6 +9,8 @@ export async function main(ns) {
 	let servers = [];
 	let AZB = {};
 	let ptarget = {};
+	let id = -1;
+	let host = "home";
 	
 	function sum(a,b){
 		return a.threads + b.threads;	
@@ -36,9 +38,22 @@ export async function main(ns) {
 					continue;
 				}
 				else{
-					batch(ns, servers, AZB, ptarget.hostname, div, 0);
-					await ns.sleep(INTERVAL);
+					if (id != 0 && !ns.isRunning("t_enfeeble.js", host, ...[host, 0, 0])) {
+						id = 0;
+						let temp = await batch(ns, servers, AZB, ptarget.hostname, div, 0, id);
+						host = temp[3].hostname;
+						id++;
+						await ns.sleep(INTERVAL);
+					}
+					else{
+						await batch(ns, servers, AZB, ptarget.hostname, div, 0, id);
+						id++;
+						await ns.sleep(INTERVAL);
+					}
 				}
+			}
+			else{
+				await ns.sleep(INTERVAL * 10);	
 			}
 			
 		}
