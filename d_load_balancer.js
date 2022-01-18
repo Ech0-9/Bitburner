@@ -40,7 +40,7 @@ export async function main(ns) {
 			PRBTS.read();
 			PRBTS.write(JSON.stringify(rootServers));
 
-			if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
+			//if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
 			if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
 			if(!CONFIG.runLogisticsST && !CONFIG.runLogisticsFN) await setConfig(ns, {"runLogisticsST": true});
 		}
