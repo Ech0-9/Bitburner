@@ -39,7 +39,7 @@ export function batch(ns, s, azb, tg, d, i){
 	hgw(ns, "GROW", s, Math.ceil(azb.growThreads/d), azb, tg);
 	hgw(ns, "WEAK", s, Math.ceil(azb.g_weakThreads/d), azb, tg);
 	i++;
-	ns.toast("Batch ${i} of ${d} completed", "info", 3000);
+	ns.toast("Batch ${i} of ${d} Started", "info", 3000);
 	if(i < d){
 		batch(ns, s, azb, tg, d, i);	
 	}
@@ -49,8 +49,8 @@ export function batch(ns, s, azb, tg, d, i){
 export function prime(ns, s, azp, tg, d, i){
 	hgw(ns, "GROW", s, Math.ceil(azp.growThreads/d), azp, tg);
 	hgw(ns, "WEAK", s, Math.ceil(azp.g_weakThreads/d), azp, tg);
-	ns.toast("Prime ${i} of ${d} completed", "info", 3000);
 	i++;
+	ns.toast("Prime ${i} of ${d} Started", "info", 3000);
 	if(i < d){
 		prime(ns, s, azp, tg, d, i);	
 	}
