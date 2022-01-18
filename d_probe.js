@@ -231,8 +231,8 @@ export async function main(ns){
 		//port writing section
 		LBS.data[0] = JSON.stringify(serverList);
 		AZS.data[0] = JSON.stringify(priority);
-		if(!CONFIG.runLoadBalancer) await setConfig(ns, {"runLoadBalancer": true});
-		if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
+		//if(!CONFIG.runLoadBalancer) await setConfig(ns, {"runLoadBalancer": true});
+		//if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
 		await ns.sleep(CONFIG.interval);
 		}
 		catch{
