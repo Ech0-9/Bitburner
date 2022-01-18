@@ -22,9 +22,9 @@ export async function main(ns) {
 				primed = JSON.parse(PRL.peek());	
 			}
 			if(primed){
-				ptarget = JSON.parse(AZL.data[0]);
-				AZB = JSON.parse(AZL.data[1]);
-				servers = JSON.parse(LBL.data[0]);
+				ptarget = JSON.parse(AZL.peek())[0];
+				AZB = JSON.parse(AZL.peek())[1];
+				servers = JSON.parse(LBL.peek());
 
 				let aRam = servers.reduce(sum, 0);
 				let div = 0;
