@@ -5,21 +5,26 @@ export async function main(ns){
 	const LBL = ns.getPortHandle(6);
 	const LBS = ns.getPortHandle(8);
 	const PBS = ns.getPortHandle(7);
-	const CONFIG = getConfig(ns);
-	const INTERVAL = CONFIG.interval;
 	let counter = 0;
 	let cycle = 3;
 	let pow = 4;
-	let ram = CONFIG.pservers.minSize;
 	
-	while(true){
+	while(true){	
+		const CONFIG = getConfig(ns);
+		const INTERVAL = CONFIG.interval;
+		let ram = CONFIG.pservers.minSize;
+		let pserv = ns.getPurchasedServers();
+		
+		if(pserv.length == 25 && ns.getServerMaxRam(pserv[24]) == ns.getPurchasedServerMaxRam()){
+			await setConfig(ns, {"runLogisticsFN": true});
+			ns.exit()
+		}
 		if(cycle > 20){
 			ns.toast("Max Server Upgrade acheived!!", "warning", 15000);
 			await setConfig(ns, {"runLogisticsFN": true});
 			ns.exit()
 		}
 		if(LBL.peek() != "NULL PORT DATA"){
-			let pserv = ns.getPurchasedServers();
 			let purchased = "";
 			let delay = 0;
 			if(pserv.length < 25){
