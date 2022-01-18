@@ -65,15 +65,11 @@ export async function main(ns) {
 			let prime_analysis = prime_analyze(threads, wst, gmul, target);
 
 			let load = [priority, batch_analysis, prime_analysis];
-
-			if (PRBTS.peek() == "NULL PORT DATA") {
-				PRBTS.write(JSON.stringify(load));
-				await ns.write("PRIORITY.txt", JSON.stringify(priority), "w");
-				await ns.write("LOG_BATCH.txt", JSON.stringify(batch_analysis), "w");
-				await ns.write("LOG_PRIME.txt", JSON.stringify(prime_analysis), "w");
-			}
-			//if(!CONFIG.runPrimer) await setConfig(ns, {"runPrimer": true});
-			//if(!CONFIG.runBatcher) await setConfig(ns, {"runBatcher": true});
+			
+			PRBTS.read();
+			PRBTS.write(JSON.stringify(load));
+			if(!CONFIG.runPrimerAZ) await setConfig(ns, {"runPrimerAZ": true});
+			if(!CONFIG.runBatcherAZ) await setConfig(ns, {"runBatcherAZ": true});
 		}
 		await ns.sleep(INTERVAL);
 	}
