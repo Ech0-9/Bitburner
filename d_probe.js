@@ -98,7 +98,7 @@ export async function main(ns) {
 					}
 				}
 				ns.nuke(servers[i].hostname);
-				if (ns.hasRootAccess) {
+				if (ns.hasRootAccess(servers[i].hostname)) {
 					servers[i].root = true;
 				}
 			}
