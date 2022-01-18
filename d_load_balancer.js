@@ -1,42 +1,54 @@
-import {getConfig, setConfig} from "util.js";
+import { getConfig, setConfig } from "util.js";
 
 export async function main(ns) {
 	const PBL = ns.getPortHandle(1);
 	const PRBTS = ns.getPortHandle(3);
+	PRBTS.clear();
 	const LS = ns.getPortHandle(6);
+	LS.clear();
+	const LOL = ns.getPortHandle(8);
 	const tSize = 1.75;
-	
-	function sum (a,b) {
-		return a.threads + b.threads;	
+
+	function sum(a, b) {
+		return a.threads + b.threads;
 	}
-	function desc(a,b) {
-		return 	b.threads - a.threads;
+	function desc(a, b) {
+		return b.threads - a.threads;
 	}
-	
-	while(true){
+
+	while (true) {
 		const CONFIG = getConfig(ns);
 		const INTERVAL = CONFIG.interval;
-		while(PBL.data[0] != "NULL PORT DATA"){
-		
-			let rootServers = PBL.data[0];
-			rootServers.forEach(rs => {
+		while (PBL.peek() != "NULL PORT DATA") {
+			let rootServers = JSON.parse(PBL.read());
+			for (let i = 0; i < rootServers.length; i++) {
+				let rs = rootServers[i];
 				rs.threads = Math.floor((rs.mRam - ns.getServerUsedRam(rs.hostname)) / tSize);
-			}).sort(desc);
-			
-			let down = LS.data[1];
-			let dsi = rootServers.findIndex(fi => fi.hostname == down);
-			if(dsi >= 0) rootServers.splice(dsi, 1);
-			
-			let total = rootServers.reduce(sum, 0);
-			if(total < 1){
-				LS.data[0] = true;	
 			}
-			PRBTS.data[0] = JSON.stringify(rootServers);
+
+			rootServers.sort(desc);
 			
-			if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
-			if(!CONFIG.runLogistics) await setConfig(ns, {"runLogistics": true});
+			if (LOL.peek() != "NULL PORT DATA") {
+				let down = JSON.parse(LOL.peek());
+				let dsi = rootServers.findIndex(fi => fi.hostname == down);
+				if (dsi >= 0) rootServers.splice(dsi, 1);
+			}
+			let total = rootServers.reduce(sum, 0);
+			if (total < 1 && LS.peek() == "NULL PORT DATA") {
+				LS.write(JSON.stringify(true));
+			}
+			while (PRBTS.peek() == "NULL PORT DATA") {
+				PRBTS.write(JSON.stringify(rootServers));
+				await ns.write("ROOTSERVERS.txt", JSON.stringify(rootServers), "w");
+				break;
+			}
+
+			//if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
+			//if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
+			//if(!CONFIG.runLogistics) await setConfig(ns, {"runLogistics": true});
+
 			await ns.sleep(INTERVAL);
-			
+
 		}
 		await ns.sleep(INTERVAL);
 	}
