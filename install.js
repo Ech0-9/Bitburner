@@ -12,7 +12,7 @@ const INSTALL_FILES = [
   "d_load_balancer.js",
   "r_money.js",
   "r_servers.js",
-  //"start.js",
+  "start.js",
   "t_engorge.js",
   "t_extract.js",
   "t_enfeeble.js",
