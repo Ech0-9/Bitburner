@@ -10,7 +10,7 @@ export async function main(ns){
 		const SERVICE = [
 			[CONFIG.runProbe, true, "d_probe.js"],
 			[CONFIG.runLoadBalancer, true, "d_load_balancer.js"],
-			[CONFIG.runAnanlyzer, true, "d_analyzer.js"],
+			[CONFIG.runAnalyzer, true, "d_analyzer.js"],
 			[CONFIG.runBatcherLB, CONFIG.runBatcherAZ, "d_batcher.js"],
 			[CONFIG.runPrimerLB, CONFIG.runPrimerAZ, "d_primer.js"],
 			[CONFIG.runLogisticsST, true, "d_logistics.js"]
