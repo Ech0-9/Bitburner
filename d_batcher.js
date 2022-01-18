@@ -28,7 +28,10 @@ export async function main(ns) {
 				AZB = JSON.parse(AZL.peek())[1];
 				servers = JSON.parse(LBL.peek());
 
-				let aRam = servers.reduce(sum, 0);
+				let aRam = 0;
+				for(let i = 0; i < servers.length; i++){
+					aRam += servers.threads;	
+				}
 				let div = 0;
 				if(aRam != 0){
 					div = Math.ceil(AZB.total / aRam);
