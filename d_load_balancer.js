@@ -37,11 +37,8 @@ export async function main(ns) {
 			if (total < 1 && LS.peek() == "NULL PORT DATA") {
 				LS.write(JSON.stringify(true));
 			}
-			while (PRBTS.peek() == "NULL PORT DATA") {
-				PRBTS.write(JSON.stringify(rootServers));
-				await ns.write("ROOTSERVERS.txt", JSON.stringify(rootServers), "w");
-				break;
-			}
+			PRBTS.read();
+			PRBTS.write(JSON.stringify(rootServers));
 
 			//if(!CONFIG.runBatcherLB) await setConfig(ns, {"runBatcherLB": true});
 			//if(!CONFIG.runPrimerLB) await setConfig(ns, {"runPrimerLB": true});
