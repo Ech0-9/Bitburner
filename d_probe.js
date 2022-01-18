@@ -5,9 +5,12 @@ export async function main(ns) {
 	const ALL_SERVERS = allServers(ns, false);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
 	let CONFIG = getConfig(ns);
+	const INTERVAL = CONFIG.interval;
 	let reserved = CONFIG.reservedRAM.home;
 	const LBS = ns.getPortHandle(1);
+	LBS.clear();
 	const AZS = ns.getPortHandle(2);
+	AZS.clear();
 	const PRL = ns.getPortHandle(5);
 	const LL = ns.getPortHandle(7);
 
@@ -27,11 +30,7 @@ export async function main(ns) {
 	}
 
 	let hlvl = 0;
-	let oldPriority = {
-		"hostname": "NOT A SERVER"
-	};
 	let servers = [];
-	let pservers = [];
 	let home = {
 		"hostname": "home",
 		"root": true,
@@ -41,7 +40,6 @@ export async function main(ns) {
 		"avaMoney": 0,
 		"minSecurity": 0,
 		"level": 0,
-		"personal": true,
 		"primed": false
 	};
 
@@ -49,44 +47,26 @@ export async function main(ns) {
 		let as = ALL_SERVERS[i];
 		let a = {
 			"hostname": as,
-			"root": false,
+			"root": ns.hasRootAccess(as),
 			"mRam": ns.getServerMaxRam(as),
 			"threads": "",
 			"maxMoney": ns.getServerMaxMoney(as),
 			"avaMoney": 0,
 			"minSecurity": ns.getServerMinSecurityLevel(as),
 			"level": ns.getServerRequiredHackingLevel(as),
-			"personal": false,
 			"primed": false
 		}
 		servers.push(a);
 	}
-	servers.unshift(home);
 	//places home at the 0 index of servers
-	let nps = ns.getPurchasedServers();
-	for (let i = 0; i < nps.length; i++) {
-		let s = nps[i];
-		let a = {
-			"hostname": s,
-			"root": true,
-			"mRam": ns.getServerMaxRam(s),
-			"threads": "",
-			"maxMoney": 0,
-			"avaMoney": 0,
-			"minSecurity": 0,
-			"level": 0,
-			"personal": true,
-			"primed": false
-		}
-		pservers.push(a);
-	}
-	servers = servers.concat(pservers);
+	servers.unshift(home);
 	while (true) {
 		CONFIG = getConfig(ns);
+
 		//updates list of personal servers with new servers or updated max ram values
 
 		if (LL.peek() != "NULL PORT DATA") {
-			let pu = JSON.parse(LL.data.shift());
+			let pu = JSON.parse(LL.read());
 			updatePServers(servers, pu);
 		}
 		//try and rootAccess servers that are hackable (ie ports and level)
@@ -96,33 +76,30 @@ export async function main(ns) {
 
 		hlvl = ns.getHackingLevel();
 
-		let fservers = servers.filter(f => {
-			return !f.personal;
-		});
-		for (let i = 0; i < fservers.length; i++) {
-			if (hlvl >= fservers[i].level && !fservers[i].root) {
+		for (let i = 0; i < servers.length; i++) {
+			if (hlvl >= servers[i].level && !servers[i].root) {
 				for (let j = 0; j < availableExe.length; j++) {
 					switch (availableExe[i]) {
 						case "BruteSSH.exe":
-							ns.brutessh(fservers[i].hostname);
+							ns.brutessh(servers[i].hostname);
 							break;
 						case "FTPCrack.exe":
-							ns.ftpcrack(fservers[i].hostname);
+							ns.ftpcrack(servers[i].hostname);
 							break;
 						case "relaySMTP.exe":
-							ns.relaysmtp(fservers[i].hostname);
+							ns.relaysmtp(servers[i].hostname);
 							break;
 						case "HTTPWorm.exe":
-							ns.httpworm(fservers[i].hostname);
+							ns.httpworm(servers[i].hostname);
 							break;
 						case "SQLInject.exe":
-							ns.sqlinject(fservers[i].hostname);
+							ns.sqlinject(servers[i].hostname);
 							break;
 					}
 				}
-				ns.nuke(fservers[i].hostname);
+				ns.nuke(servers[i].hostname);
 				if (ns.hasRootAccess) {
-					fservers[i].root = true;
+					servers[i].root = true;
 				}
 			}
 
@@ -135,32 +112,33 @@ export async function main(ns) {
 
 			//make array with all unowned servers with rootAccess and personal servers
 			//copy made due to max money sort later to find priority.
-			let serverList = rootServers;
+			let serverList = rootServers.map(rs => { return rs });
 
 			//sorts list to highest max money server.
 			let priority = rootServers.sort((a, b) => {
 				return b.maxMoney - a.maxMoney;
 			}).shift();
-			ns.tprint(priority);
 
 			priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
 			//priority primed check
 
 			if (PRL.peek() != "NULL PORT DATA") {
-				let p = JSON.parse(PRL.data.shift());
+				let p = JSON.parse(PRL.read());
 				if (priority.hostname == p.hostname) {
 					priority.primed = p.primed;
 				}
 			}
 			//port writing section
-			while(!LBS.tryWrite(JSON.stringify(serverList))){
-				await ns.sleep(INTERVAL);
+			while (LBS.peek() == "NULL PORT DATA") {
+				LBS.write(JSON.stringify(serverList));
+				break;
 			}
-			while(!AZS.tryWrite(JSON.stringify(priority))){
-				await ns.sleep(INTERVAL);
+			while (AZS.peek() == "NULL PORT DATA") {
+				AZS.write(JSON.stringify(priority));
+				break;
 			}
-			if(!CONFIG.runLoadBalancer) await setConfig(ns, {"runLoadBalancer": true});
-			//if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
+			if (!CONFIG.runLoadBalancer) await setConfig(ns, { "runLoadBalancer": true });
+			if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
 			await ns.sleep(INTERVAL);
 		}
 	}
