@@ -56,6 +56,7 @@ export function batch(ns, s, azb, tg, d, i, id){
 //i must be zero on initial call
 export function prime(ns, s, azp, tg, d, i){
 	const int = 200;
+	let s2 = s.map(a => {return a});
 	let g = hgw(ns, "GROW", s, Math.ceil(azp.growThreads/d), azp, tg, i + 1);
 	let w = hgw(ns, "WEAK", s, Math.ceil(azp.g_weakThreads/d), azp, tg, i + 1);
 	i++;
@@ -64,7 +65,7 @@ export function prime(ns, s, azp, tg, d, i){
 		await ns.sleep(int);
 	}
 	if(i < d){
-		prime(ns, s, azp, tg, d, i);	
+		prime(ns, s2, azp, tg, d, i);	
 	}
 }
 export function concat(a, b){
