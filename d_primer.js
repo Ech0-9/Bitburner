@@ -24,8 +24,12 @@ export async function main(ns){
 			//
 			AZP = JSON.parse(AZL.peek())[2];
 			servers = JSON.parse(LBL.peek());
-			await ns.write("LOGSERVERS.txt", JSON.stringify(servers), "w");
-			let aRam = servers.reduce(sum, 0);
+			//await ns.write("LOGSERVERS.txt", JSON.stringify(servers), "w");
+			//let aRam = servers.reduce(sum, 0);
+			let aRam = 0;
+			for(let i = 0; i < servers.length; i++){
+				aRam += servers[i].threads;	
+			}
 			if(!ptarget.primed){
 				let div = 0;
 				if(aRam != 0){
@@ -36,7 +40,7 @@ export async function main(ns){
 					continue;
 				}
 				else{
-					prime(ns, servers, AZP, ptarget.hostname, Math.ceil(AZP.total/aRam), 0);
+					prime(ns, servers, AZP, ptarget.hostname, div, 0);
 					ptarget.primed = true;
 					if(PRS.peek() != "NULL PORT DATA"){
 						PRS.read();	
