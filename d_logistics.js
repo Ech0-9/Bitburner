@@ -3,6 +3,7 @@ import {getConfig, setConfig} from "util.js";
 export async function main(ns){
 	const marker = "unavailable_server.txt";
 	const LBL = ns.getPortHandle(6);
+	const LBS = ns.getPortHandle(8);
 	const PBS = ns.getPortHandle(7);
 	const CONFIG = getConfig(ns);
 	const INTERVAL = CONFIG.interval;
@@ -17,7 +18,7 @@ export async function main(ns){
 			await setConfig(ns, {"runLogisticsFN": true});
 			ns.exit()
 		}
-		while(LBL.data[0] != "NULL PORT DATA"){
+		if(LBL.peek() != "NULL PORT DATA"){
 			let pserv = ns.getPurchasedServers();
 			let purchased = "";
 			let delay = 0;
@@ -32,12 +33,12 @@ export async function main(ns){
 				await ns.scp("t_engorge.js", "home", purchased);
 				await ns.scp("t_enfeeble.js", "home", purchased);
 				await ns.scp("t_extract.js", "home", purchased);
-				LBL.data.shift();
+				LBL.read();
 			}
 			else{
 				
 				//await ns.scp(marker, "home", pserv[0]);
-				LBL.data[1] = pserv[0];
+				LBS.write(JSON.stringify(pserv[0]));
 				while(ns.getServerUsedRam(pserv[0]) != 0){
 					await ns.sleep(10000);
 				}
@@ -58,7 +59,8 @@ export async function main(ns){
 				await ns.scp("t_engorge.js", "home", pserv[0]);
 				await ns.scp("t_enfeeble.js", "home", pserv[0]);
 				await ns.scp("t_extract.js", "home", pserv[0]);
-				LBL.data.splice(0, 2);
+				LBS.read();
+				LBL.read();
 				
 			}
 			let ups = {
@@ -70,11 +72,11 @@ export async function main(ns){
 				"avaMoney": 0,
 				"minSecurity": 0,
 				"level": 0,
-				"personal": true,
 				"primed": false
 			};
-			PBS.data[0] = JSON.stringify(ups);
-			break;
+			while(PBS.peek() == "NULL PORT DATA"){
+				PBS.write(JSON.stringify(ups));
+			}
 		}
 		await ns.sleep(INTERVAL);
 	}
