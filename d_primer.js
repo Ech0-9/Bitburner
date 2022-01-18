@@ -24,6 +24,7 @@ export async function main(ns){
 			//
 			AZP = JSON.parse(AZL.peek())[2];
 			servers = JSON.parse(LBL.peek());
+			await ns.write("LOGSERVERS.txt", JSON.stringify(servers), "w");
 			let aRam = servers.reduce(sum, 0);
 			if(!ptarget.primed){
 				let div = 0;
