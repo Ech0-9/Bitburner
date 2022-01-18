@@ -97,7 +97,7 @@ export async function main(ns) {
 							break;
 					}
 				}
-				if(ns.getServerNumPortRequired(servers[i].hostname) <= availableExe.length){
+				if(ns.getServerNumPortsRequired(servers[i].hostname) <= availableExe.length){
 					ns.nuke(servers[i].hostname);
 				}
 				if (ns.hasRootAccess(servers[i].hostname)) {
