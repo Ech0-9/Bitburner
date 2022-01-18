@@ -21,7 +21,7 @@ export async function main(ns) {
 		if(LBL.peek() != "NULL PORT DATA" && AZL.peek() != "NULL PORT DATA"){
 			let primed = false;
 			if(PRL.peek() != "NULL PORT DATA"){
-				primed = PRL.peek();	
+				primed = JSON.parse(PRL.peek()).primed;	
 			}
 			if(primed){
 				ptarget = JSON.parse(AZL.peek())[0];
