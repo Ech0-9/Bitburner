@@ -1,5 +1,6 @@
 import { getConfig, setConfig } from "util.js";
 
+
 export async function main(ns) {
 	const hst = 0.002;
 	const gst = 0.004;
@@ -31,11 +32,11 @@ export async function main(ns) {
 			"total": total,
 		};
 	}
+
 	function prime_analyze(t1, w1, gm1, tg) {
 		t1[0] = Math.ceil(ns.growthAnalyze(tg, gm1, 1));
 		t1[1] = Math.ceil((gst * t1[0]) / w1);
 		let total = t1.reduce(sum, 0);
-
 		return {
 			"hostname": tg,
 			"growTime": ns.getGrowTime(tg),
@@ -50,11 +51,12 @@ export async function main(ns) {
 		const CONFIG = getConfig(ns);
 		const INTERVAL = CONFIG.interval;
 		const per = CONFIG.percentage / 100;
-		const gmul = 1 / (1 - per);
+		let gmul = 1 / (1 - per);
 		if (PBL.peek() != "NULL PORT DATA") {
 
 			let priority = JSON.parse(PBL.read());
 			let target = priority.hostname;
+			let gprime = priority.maxMoney / priority.avaMoney;
 
 			//batch analysis section
 			let threads = [0, 0, 0, 0];
@@ -62,14 +64,15 @@ export async function main(ns) {
 
 			//prime analysis section
 			threads = [0, 0];
-			let prime_analysis = prime_analyze(threads, wst, gmul, target);
+			let prime_analysis = prime_analyze(threads, wst, gprime, target);
 
 			let load = [priority, batch_analysis, prime_analysis];
-			
+
 			PRBTS.read();
 			PRBTS.write(JSON.stringify(load));
-			if(!CONFIG.runPrimerAZ) await setConfig(ns, {"runPrimerAZ": true});
-			//if(!CONFIG.runBatcherAZ) await setConfig(ns, {"runBatcherAZ": true});
+
+			if (!CONFIG.runPrimerAZ) await setConfig(ns, {"runPrimerAZ": true });
+			if(!CONFIG.runBatcherAZ) await setConfig(ns, {"runBatcherAZ": true});
 		}
 		await ns.sleep(INTERVAL);
 	}
