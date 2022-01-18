@@ -20,7 +20,7 @@ export async function main(ns){
 			ptarget = JSON.parse(AZL.peek())[0];
 			//sends true or false to probe and batcher
 			PRS.read();
-			PRS.write(JSON.strigifiy(ptarget.primed));
+			PRS.write(JSON.stringifiy(ptarget.primed));
 			//
 			AZP = JSON.parse(AZL.peek())[2];
 			servers = JSON.parse(LBL.peek());
@@ -40,7 +40,7 @@ export async function main(ns){
 					if(PRS.peek() != "NULL PORT DATA"){
 						PRS.read();	
 					}
-					PRS.write(JSON.strigifiy(ptarget.primed));
+					PRS.write(JSON.stringifiy(ptarget.primed));
 					//increased interval to ensure Probe updates the primed field sent to analyzer which is sent to primer
 					//this way we don't try an prime a primed server.
 					await ns.sleep(INTERVAL * 5);
