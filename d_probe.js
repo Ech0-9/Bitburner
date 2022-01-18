@@ -102,44 +102,42 @@ export async function main(ns) {
 					servers[i].root = true;
 				}
 			}
+		}
 
-			//finds servers with root access
-			let rootServers = servers.filter(s => {
-				if (s.root) return s;
-			});
-
-
-
+		//finds servers with root access
+		let rootServers = servers.filter(s => {
+			if (s.root) return s;
+		});
 			//make array with all unowned servers with rootAccess and personal servers
 			//copy made due to max money sort later to find priority.
-			let serverList = rootServers.map(rs => { return rs });
+		let serverList = rootServers.map(rs => { return rs });
 
 			//sorts list to highest max money server.
-			let priority = rootServers.sort((a, b) => {
-				return b.maxMoney - a.maxMoney;
-			}).shift();
+		let priority = rootServers.sort((a, b) => {
+			return b.maxMoney - a.maxMoney;
+		}).shift();
 
-			priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
+		priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
 			//priority primed check
 
-			if (PRL.peek() != "NULL PORT DATA") {
-				let p = JSON.parse(PRL.read());
-				if (priority.hostname == p.hostname) {
-					priority.primed = p.primed;
-				}
+		if (PRL.peek() != "NULL PORT DATA") {
+			let p = JSON.parse(PRL.read());
+			if (priority.hostname == p.hostname) {
+				priority.primed = p.primed;
 			}
-			//port writing section
-			while (LBS.peek() == "NULL PORT DATA") {
-				LBS.write(JSON.stringify(serverList));
-				break;
-			}
-			while (AZS.peek() == "NULL PORT DATA") {
-				AZS.write(JSON.stringify(priority));
-				break;
-			}
-			if (!CONFIG.runLoadBalancer) await setConfig(ns, { "runLoadBalancer": true });
-			if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
-			await ns.sleep(INTERVAL);
 		}
+		//port writing section
+		while (LBS.peek() == "NULL PORT DATA") {
+			LBS.write(JSON.stringify(serverList));
+			break;
+		}
+		while (AZS.peek() == "NULL PORT DATA") {
+			AZS.write(JSON.stringify(priority));
+			break;
+		}
+		if (!CONFIG.runLoadBalancer) await setConfig(ns, { "runLoadBalancer": true });
+		if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
+		await ns.sleep(INTERVAL);
+			
 	}
 }
