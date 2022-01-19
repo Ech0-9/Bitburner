@@ -1,5 +1,5 @@
 const CONF_FILE_NAME = "config.json.txt";
-const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/main";
+const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/v2";
 const INSTALL_FILES = [
   "config.default.json.txt",
   "unavailable_server.txt",
@@ -9,7 +9,7 @@ const INSTALL_FILES = [
   "d_batcher.js",
   "d_analyzer.js",
   "d_primer.js",
-  "d_load_balancer.js",
+  //"d_load_balancer.js",
   "r_money.js",
   "r_servers.js",
   "start.js",
