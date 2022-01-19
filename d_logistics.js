@@ -1,88 +1,75 @@
-import {getConfig, setConfig} from "util.js";
+import {getPserver, setPserver, setConfig, getConfig} from "util.js";
 
 export async function main(ns){
-	//const marker = "unavailable_server.txt";
-	const LBL = ns.getPortHandle(6);
-	const LBS = ns.getPortHandle(8);
-	const PBS = ns.getPortHandle(7);
-	let counter = 0;
-	let cycle = 3;
-	let pow = 4;
+	const CONFIG = getConfig(ns);
+	const INTERVAL = CONFIG.interval;
+	const PSERV = getPserver(ns);
+	const port4 = ns.getPortHandle(4);
 	
-	while(true){	
-		const CONFIG = getConfig(ns);
-		const INTERVAL = CONFIG.interval;
-		let ram = CONFIG.pservers.minSize;
-		let pserv = ns.getPurchasedServers();
-		
-		if(pserv.length == 25 && ns.getServerMaxRam(pserv[24]) == ns.getPurchasedServerMaxRam()){
-			await setConfig(ns, {"runLogisticsFN": true});
-			ns.exit()
+	let serv = "";
+	if(PSERV.curRam == PSERV.maxRam && PSERV.upgraded == 25){
+		ns.toast("MAX SERVER UPGRADES ACHIEVED!!", "success", 10000);
+		setConfig(ns, {"runLogisticsFN": true});
+	}
+	if(PSERV.purchased < 25){
+		do{
+			serv = ns.purchaseServer(`${PSERV.prefix}-${PSERV.preIndex}`, PSERV.curRam);
+			ns.toast(`Purchased New Server: ${serv} RAM: ${PSERV.curRam}`, "success", 4000);
+			
+		} while (serv != "");
+		await ns.scp("t_engorge.js", "home", serv);
+		await ns.scp("t_enfeeble.js", "home", serv);
+		await ns.scp("t_extract.js", "home", serv);
+		if(PSERV.purchased + 1 == 25){
+			await setPserver(ns, {"curRam": Math.pow(2, PSERV.power)}); 
+			await setPserver(ns, {"power": PSERV.power + 1});
+			await setPserver(ns, {"purchased": PSERV.purchased + 1});
+			await setPserver(ns, {"preIndex": PSERV.preIndex + 1});
+			await setPserver(ns, {"preIndex": 0});
 		}
-		if(cycle > 20){
-			ns.toast("Max Server Upgrade acheived!!", "warning", 15000);
-			await setConfig(ns, {"runLogisticsFN": true});
-			ns.exit()
+		else{
+			await setPserver(ns, {"purchased": PSERV.purchased + 1});
+			await serPserver(ns, {"preIndex": PSERV.preIndex + 1});	
 		}
-		if(LBL.peek() != "NULL PORT DATA"){
-			let purchased = "";
-			let delay = 0;
-			if(pserv.length < 25){
-				do{
-					if(delay != 0) await ns.sleep(delay);
-					purchased = ns.purchaseServer(CONFIG.pservers.prefix, ram);
-					delay = 10000;
-				} while(purchased != "");
-				ns.toast(`Purchased New Server: ${purchased} RAM: ${ram}`, "success", 4000);
-				await ns.scp("t_engorge.js", "home", purchased);
-				await ns.scp("t_enfeeble.js", "home", purchased);
-				await ns.scp("t_extract.js", "home", purchased);
-				LBL.read();
-			}
-			else{
-				
-				//await ns.scp(marker, "home", pserv[0]);
-				LBS.write(JSON.stringify(pserv[0]));
-				while(ns.getServerUsedRam(pserv[0]) != 0){
-					await ns.sleep(10000);
-				}
-				ns.deleteServer(pserv[0]);
-				ram = Math.pow(2, pow);
-				do{	
-					if(delay != 0) await ns.sleep(delay);
-					purchased = ns.purchaseServer(pserv[0], ram);
-					delay = 10000;
-				} while(purchased != "")
-				ns.toast(`Upgraded Server: ${purchased} RAM: ${ram}`, "success", 4000);
-				counter++;
-				if(counter == 25){
-					counter = 0;
-					cycle++;
-					pow++;
-				}
-				await ns.scp("t_engorge.js", "home", pserv[0]);
-				await ns.scp("t_enfeeble.js", "home", pserv[0]);
-				await ns.scp("t_extract.js", "home", pserv[0]);
-				LBS.read();
-				LBL.read();
-				
-			}
-			let ups = {
-				"hostname": purchased,
-				"root": true,
-				"mRam": ram,
-				"threads": "",
-				"maxMoney": 0,
-				"avaMoney": 0,
-				"minSecurity": 0,
-				"level": 0,
-				"primed": false
-			};
-			while(PBS.peek() == "NULL PORT DATA"){
-				PBS.write(JSON.stringify(ups));
-			}
+	}
+	else{
+		while(ns.getServerUsedRam(`${PSERV.prefix}-${PSERV.preIndex}`) != 0){
+			await ns.sleep(10000);
 		}
-		await ns.sleep(INTERVAL);
+		ns.deleteServer(`${PSERV.prefix}-${PSERV.preIndex}`);
+		do{
+			serv = ns.purchaseServer(`${PSERV.prefix}-${PSERV.preIndex}`, PSERV.curRam);
+			ns.toast(`Upgraded Server: ${serv} RAM: ${PSERV.curRam}`, "success", 4000);
+			
+		} while (serv != "");
+		await ns.scp("t_engorge.js", "home", serv);
+		await ns.scp("t_enfeeble.js", "home", serv);
+		await ns.scp("t_extract.js", "home", serv);
+		if(PSERV.upgraded + 1 == 25){
+			await setPserver(ns, {"curRam": Math.pow(2, PSERV.power)}); 
+			await setPserver(ns, {"upgraded": PSERV.upgraded + 1});
+			await serPserver(ns, {"preIndex": PSERV.preIndex + 1});
+			await setPserver(ns, {"preIndex": 0});
+			await setPserver(ns, {"power": PSERV.power + 1});
+		}
+		else{
+			await setPserver(ns, {"purchased": PSERV.upgraded + 1});
+			await serPserver(ns, {"preIndex": PSERV.preIndex + 1});	
+		}
+	}
+	let ups = {
+		"hostname": serv,
+		"root": true,
+		"mRam": PSERV.curRam,
+		"threads": Math.ceil(PSERV.curRam / 1.75),
+		"maxMoney": 0,
+		"avaMoney": 0,
+		"minSecurity": 0,
+		"level": 0,
+		"primed": false
+	};
+	while(!port4.tryWrite(JSON.stringify(ups))){
+		await ns.sleep(INTERVAL);	
 	}
 }
 
