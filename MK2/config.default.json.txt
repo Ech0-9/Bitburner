@@ -1,0 +1,21 @@
+{
+  "interval": 100,
+  "percentage": 10,
+  "runProbe": true,
+  "runAnalyzer": false,
+  "runLoadBalancer": false,
+  "runPrimerLB": false,
+  "runPrimerAZ": false,
+  "runBatcherLB": false,
+  "runBatcherAZ": false,
+  "runBatcherPR": false,
+  "runLogisticsST": false,
+  "runLogisticsFN": false,
+  "pservers":{
+    "prefix": "p-cloud",
+    "minSize": 8
+  },
+  "reservedRAM": {
+    "home": 64
+  }
+}
