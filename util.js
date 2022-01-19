@@ -1,4 +1,5 @@
 const CONFIG_FILE = "config.json.txt";
+const PSERVER_FILE = "pservers.json.txt";
 
 function dec2hex (dec) {
   return dec.toString(16).padStart(2, "0")
@@ -75,12 +76,21 @@ export function findServer(ns, host, start) {
 export function getConfig(ns){
   return JSON.parse(ns.read(CONFIG_FILE));
 }
+export function getPserver(ns){
+	return JSON.parse(ns.read(PSERVER_FILE));	
+}
 
 export async function setConfig(ns, nVal){
   let conf = getConfig(ns),
   nConf = merge(nVal, conf);
   await ns.write(CONFIG_FILE, JSON.stringify(nConf, null, "  "), "w");
   return nConf;
+}
+export async function setPservers(ns, nVal){
+	let conf = getPservers(ns),
+	nConf = merge(nVal, conf);
+  	await ns.write(PSERVER_FILE, JSON.stringify(nConf, null, "  "), "w");
+  	return nConf;
 }
 
 export function maxThreads(cost, avail){
