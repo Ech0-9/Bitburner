@@ -1,3 +1,5 @@
+import {getPserver, setPserver} from "util.js";
+
 function hgw(ns, ty, s, t, az, tg, id){
     	const TDIF = 200;
    	const SCRIPTS = ["t_extract.js", "t_engorge.js", "t_enfeeble.js"];
@@ -68,17 +70,59 @@ export function prime(ns, s, azp, tg, d, i){
 		prime(ns, s2, azp, tg, d, i);	
 	}
 }
-export function concat(a, b){
-	let c = new Array(a.length + b.length);
-	for(let i = 1, j = 1, k = 1; i <= c.length; i++){
-		if(i < b.length){
-			c[c.length-i] = b[b.length - j];
-			j++;
-		}
-		else{
-			c[c.length-i] = a[a.length-k];
-			k++;
-		}
+export function analyze(ns, pt, pb){
+	const hst = 0.002;
+	const gst = 0.004;
+	const wst = 0.05;
+	const CONFIG = getConfig(ns);
+	const INTERVAL = CONFIG.interval;
+	const per = CONFIG.percentage / 100;
+	
+	function sum(a, b) {
+		return a + b;
 	}
-	return c;
+	
+	let gmul = 1 / (1 - per);
+	let target = pt.hostname;
+	let gprime = pt.maxMoney / pt.avaMoney;
+	//batch analysis section
+	let t1 = [];
+	let analysis = {};
+	switch(pb){
+		case "B":
+			t1 = [0,0,0,0];
+			t1[0] = Math.floor(per / ns.hackAnalyze(target));
+			t1[1] = Math.ceil((hst * t1[0]) / wst);
+			t1[2] = Math.ceil(ns.growthAnalyze(target, gmul, 1));
+			t1[3] = Math.ceil((gst * t1[2]) / wst);
+			let total = t1.reduce(sum, 0);
+
+			analysis = {
+				"hostname": target,
+				"hackTime": ns.getHackTime(target),
+				"growTime": ns.getGrowTime(target),
+				"weakTime": ns.getWeakenTime(target),
+				"hackThreads": t1[0],
+				"h_weakThreads": t1[1],
+				"growThreads": t1[2],
+				"g_weakThreads": t1[3],
+				"total": total,
+			};
+			break;
+		case "P":
+			t1 = [0,0];
+			t1[0] = Math.ceil(ns.growthAnalyze(target, gmul, 1));
+			t1[1] = Math.ceil((gst * t1[0]) / wst);
+			let total = t1.reduce(sum, 0);
+			analysis = {
+				"hostname": target,
+				"growTime": ns.getGrowTime(target),
+				"weakTime": ns.getWeakenTime(target),
+				"growThreads": t1[0],
+				"g_weakThreads": t1[1],
+				"total": total,
+			};
+			break;
+	}
+	return analysis;
 }
