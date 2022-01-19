@@ -86,8 +86,8 @@ export async function setConfig(ns, nVal){
   await ns.write(CONFIG_FILE, JSON.stringify(nConf, null, "  "), "w");
   return nConf;
 }
-export async function setPservers(ns, nVal){
-	let conf = getPservers(ns),
+export async function setPserver(ns, nVal){
+	let conf = getPserver(ns),
 	nConf = merge(nVal, conf);
   	await ns.write(PSERVER_FILE, JSON.stringify(nConf, null, "  "), "w");
   	return nConf;
