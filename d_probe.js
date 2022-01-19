@@ -7,30 +7,35 @@ export async function main(ns) {
 	let CONFIG = getConfig(ns);
 	const INTERVAL = CONFIG.interval;
 	let reserved = CONFIG.reservedRAM.home;
-	const LBS = ns.getPortHandle(1);
-	LBS.clear();
-	const AZS = ns.getPortHandle(2);
-	AZS.clear();
-	const PRL = ns.getPortHandle(5);
-	const LL = ns.getPortHandle(7);
+	const port1 = ns.getPortHandle(1);
+	const port2 = ns.getPortHandle(2);
+	const port3 = ns.getPortHandle(3);
+	const port4 = ns.getPortHandle(4);
+	//clears ports on start up. Probe will always start first
+	//kill all scripts befor starting probe back up if it is killed for some reason
+	port1.clear();
+	port2.clear();
+	port3.clear();
+	port4.clear();
 
 	//will update the given list of servers mRam
-	function updatePServers(csl, ups) {
+	function updateServers(csl, ups) {
 		//update home max ram since it is not returned by ns.getPurchasedServers()
 		csl[0].mRam = ns.getServerMaxRam("home") - reserved;
-		let i = csl.findIndex(c => {
-			return c.hostname == ups;
-		});
-		if (i >= 0) {
-			csl[i].mRam = ups.mRam;
-		}
-		else {
-			csl.push(ups);
+		for(let i = 0; i < csl.length; i++){
+			if(ups.hostname == csl[i].hostname){
+				csl[i] = ups;
+				break;
+			}
+			else{
+				csl.push(ups);	
+			}
 		}
 	}
 
 	let hlvl = 0;
 	let servers = [];
+	let cluster = [];
 	let home = {
 		"hostname": "home",
 		"root": true,
@@ -45,11 +50,12 @@ export async function main(ns) {
 
 	for (let i = 0; i < ALL_SERVERS.length; i++) {
 		let as = ALL_SERVERS[i];
+		let mRam = ns.getServerMaxRam(as);
 		let a = {
 			"hostname": as,
 			"root": ns.hasRootAccess(as),
-			"mRam": ns.getServerMaxRam(as),
-			"threads": "",
+			"mRam": mRam,
+			"threads": Math.ceil(mRam/1.75),
 			"maxMoney": ns.getServerMaxMoney(as),
 			"avaMoney": 0,
 			"minSecurity": ns.getServerMinSecurityLevel(as),
@@ -65,9 +71,9 @@ export async function main(ns) {
 
 		//updates list of personal servers with new servers or updated max ram values
 
-		if (LL.peek() != "NULL PORT DATA") {
-			let pu = JSON.parse(LL.read());
-			updatePServers(servers, pu);
+		if (port4.peek() != "NULL PORT DATA") {
+			let pu = JSON.parse(port4.read());
+			updateServers(servers, pu);
 		}
 		//try and rootAccess servers that are hackable (ie ports and level)
 		let availableExe = EXECUTABLES.filter(ex => {
@@ -107,38 +113,33 @@ export async function main(ns) {
 		}
 
 		//finds servers with root access
-		let rootServers = servers.filter(s => {
-			if (s.root) return s;
+		cluster = servers.filter(s => {
+			if (s.root && s.threads > 0) return s;
 		});
 			//make array with all unowned servers with rootAccess and personal servers
 			//copy made due to max money sort later to find priority.
-		let serverList = rootServers.map(rs => { return rs });
+		let serverMoneyCopy = servers.filter(rs => { if(rs.root) return rs });
 
 			//sorts list to highest max money server.
-		let priority = rootServers.sort((a, b) => {
+		let priority = serverMoneyCopy.sort((a, b) => {
 			return b.maxMoney - a.maxMoney;
 		}).shift();
 
 		priority.avaMoney = ns.getServerMoneyAvailable(priority.hostname);
 			//priority primed check
 
-		if (PRL.peek() != "NULL PORT DATA") {
-			let p = JSON.parse(PRL.read());
+		if (port3.peek() != "NULL PORT DATA") {
+			let p = JSON.parse(port3.peek());
 			if (priority.hostname == p.hostname) {
 				priority.primed = p.primed;
 			}
 		}
 		//port writing section
-		while (LBS.peek() == "NULL PORT DATA") {
-			LBS.write(JSON.stringify(serverList));
-			break;
-		}
-		while (AZS.peek() == "NULL PORT DATA") {
-			AZS.write(JSON.stringify(priority));
-			break;
-		}
-		if (!CONFIG.runLoadBalancer) await setConfig(ns, { "runLoadBalancer": true });
-		if(!CONFIG.runAnalyzer) await setConfig(ns, {"runAnalyzer": true});
+		port1.write(JSON.stringify(cluster));
+		port1.read();
+		port2.write(JSON.stringify(priority));
+		port2.read();
+		if(!CONFIG.runPrimer) await setConfig(ns, {"runPrimer": true});
 		await ns.sleep(INTERVAL);
 			
 	}
