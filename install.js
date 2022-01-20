@@ -1,7 +1,9 @@
 const CONF_FILE_NAME = "config.json.txt";
+const PSERV_FILE_NAME = "pserver.json.txt";
 const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/v2";
 const INSTALL_FILES = [
   "config.default.json.txt",
+  "pserver.default.json.txt",
   "unavailable_server.txt",
   "d_central_brain.js",
   "d_probe.js",
@@ -75,17 +77,29 @@ export async function main(ns){
   ns.tprint("=".repeat(20));
   ns.tprint(`Merging Config ...`);
   let existingConfig = {};
+  let existingPserv = {};
   let defaultConfig = JSON.parse(ns.read("config.default.json.txt"));
+  let defaultPserv = JSON.parse(ns.read("pserver.default.json.txt"));
   if(ns.fileExists(CONF_FILE_NAME)){
     existingConfig = JSON.parse(ns.read(CONF_FILE_NAME));
   }
   else{
     ns.tprint(`Could not find ${CONF_FILE_NAME}, using defaults.`)
   }
+   if(ns.fileExists(PSERV_FILE_NAME)){
+    existingConfig = JSON.parse(ns.read(PSERV_FILE_NAME));
+  }
+  else{
+	  existingPserv = ns.tprint(`Could not find ${PSERV_FILE_NAME}, using defaults.`)
+  }
   let config = merge(defaultConfig, {});
   config = merge(existingConfig, config);
   ns.print(config);
   await ns.write(CONF_FILE_NAME, JSON.stringify(config, null, "  "), "w");
+  let pserv = merge(defaultPserv, {});
+  pserv = merge(existingPserv, pserv);
+  ns.print(pserv);
+  await ns.write(PSERV_FILE_NAME, JSON.stringify(pserv, null, "  "), "w");
   ns.tprint("=".repeat(20));
   ns.tprint("Setting up aliases ...");
   let doc = eval("document");
