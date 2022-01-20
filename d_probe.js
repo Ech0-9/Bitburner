@@ -139,6 +139,7 @@ export async function main(ns) {
 		port1.read();
 		port2.write(JSON.stringify(priority));
 		port2.read();
+		if(!CONFIG.runPrimer) await setConfig(ns, {"runBatcher": true});
 		if(!CONFIG.runPrimer) await setConfig(ns, {"runPrimer": true});
 		await ns.sleep(INTERVAL);
 			
