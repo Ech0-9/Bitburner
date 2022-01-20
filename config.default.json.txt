@@ -3,11 +3,8 @@
   "percentage": 10,
   "runProbe": true,
   "runAnalyzer": false,
-  "runPrimerLB": false,
-  "runPrimerAZ": false,
-  "runBatcherLB": false,
-  "runBatcherAZ": false,
-  "runBatcherPR": false,
+  "runPrimer": false,
+  "runBatcher": false,
   "runLogisticsFN": false,
   "reservedRAM": {
     "home": 64
