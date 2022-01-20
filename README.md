@@ -1,21 +1,20 @@
 
-# BitBurner Scripts
+# BitBurner Scripts V2
 
 This is my personal script library for BitBurner (Steam version)
 
 # Installation
 ```
-home; wget https://raw.githubusercontent.com/Ech0-9/Bitburner/main/install.js install.js; run install.js;
+home; wget https://raw.githubusercontent.com/Ech0-9/Bitburner/v2/install.js install.js; run install.js;
 ```
 # Ports
 
-| Port Number | Description           |
-| ----------- | -----------           |
-| 1           | Load_balancer Listener|
-| 2           | Load_Balancer Sender  |
-| 3           | Analyzer Listener     |
-| 4           | Analyzer Sender       |
-| 5           | Logistics Listener    |
+| Port Number | Description      |
+| ----------- | -----------      |
+| 1           | ServerList       |
+| 2           | Priority target  |
+| 3           | Priortiy Primed  |
+| 4           | Logistic Update  |
 
 # Conventions
 - scripts prefixed with "t_" represent an independent task.  These typically require a target server, but should be capable of running independently of anything else, including utils.
