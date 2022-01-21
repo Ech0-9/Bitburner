@@ -1,0 +1,9 @@
+queue batches/primes on port
+clear ports on priority update
+
+add server index to server when init probe/central_brain
+	- may be useful for atExit update of threads
+	- useful for immediate update of threads on global var. no for loop to find
+pserv add and update index. 
+	- maybe config type file. or port send on start(requires finding on init. list file?)
+may just move the threads check into the primer/batcher (at script queue)
