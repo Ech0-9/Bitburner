@@ -1,9 +1,18 @@
 import {getPserver, setPserver} from "util.js";
-
-function hgw(ns, ty, s, t, az, tg, id){
+export async function scriptRunningAny(ns, scr, c){
+	let run = false;
+	let i = 0;
+	while(!run){
+		run = ns.scriptRunning(scr, c[i].hostname);
+		i++;
+	}
+	return run;
+	
+}
+function hgw(ns, ty, s, si, t, az, tg, id){
     	const TDIF = 200;
    	const SCRIPTS = ["t_extract.js", "t_engorge.js", "t_enfeeble.js"];
-	let ss = s.shift();
+	let ss = s[si];
 	let d = 0;
 	let i = -1;
 	let pid = -1;
@@ -25,16 +34,17 @@ function hgw(ns, ty, s, t, az, tg, id){
 	let arrArgs = ["--target", tg, "--delay", d, "--id", id];
 	if(ss.threads - t == 0){
 		pid = ns.exec(SCRIPTS[i], ss.hostname, t, ...arrArgs); 
+		si++;
 	}
 	else if(ss.threads - t > 0){
 		//set ss.threads to new available and put it back on servers at the front
 		ss.threads = ss.threads - t;
-		s.unshift(ss);
 		pid ns.exec(SCRIPTS[i], ss.hostname, t, ...arrArgs);
 	}
 	else{
 		let nt = t - ss.threads;
-		next = hgw(ns, ty, s, nt, az ,tg);
+		si = hgw(ns, ty, s, si, nt, az ,tg);
+		ss = s[si];
 		pid = ns.exec(SCRIPTS[i], ss.hostname, ss.threads, ...arrArgs);
 	}
 	cur = {"pid": pid, "hostname": ss.hostname};
@@ -56,18 +66,13 @@ export function batch(ns, s, azb, tg, d, i, id){
 	
 }
 //i must be zero on initial call
-export function prime(ns, s, azp, tg, d, i){
+export function prime(ns, s, si, azp, tg, d, id){
 	const int = 200;
-	let s2 = s.map(a => {return a});
-	let g = hgw(ns, "GROW", s, Math.ceil(azp.growThreads/d), azp, tg, i + 1);
-	let w = hgw(ns, "WEAK", s, Math.ceil(azp.g_weakThreads/d), azp, tg, i + 1);
-	i++;
-	ns.toast(`Prime ${i} of ${d} Started`, "info", 10000);
+	let g = hgw(ns, "GROW", s, Math.ceil(azp.growThreads/d), azp, tg, id);
+	let w = hgw(ns, "WEAK", s, Math.ceil(azp.g_weakThreads/d), azp, tg, id);
+	ns.toast(`Prime ${id + 1} of ${d} Started`, "info", 10000);
 	while(ns.isRunning(g.pid, g.hostname) || ns.isRunning(w.pid, w.hostname)){
 		await ns.sleep(int);
-	}
-	if(i < d){
-		prime(ns, s2, azp, tg, d, i);	
 	}
 }
 export function analyze(ns, pt, pb){
