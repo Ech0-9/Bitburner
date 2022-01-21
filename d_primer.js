@@ -56,8 +56,8 @@ export async function main(ns){
 						continue;
 					}
 					//all ram available for priming and ptarget updated
-					for(let i = 0,j = 0,s = 0; i < div; i++){
-						prime(ns, cluster, s, AZP, ptarget.hostname, div, j);
+					for(let i = 0,j = 0; i < div; i++){
+						prime(ns, cluster, 0, AZP, ptarget.hostname, div, j);
 						j++;
 					}
 					ptarget.primed = true;
