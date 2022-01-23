@@ -5,7 +5,7 @@
   "priority": {
     "host": "foodnstuff",
     "primed": false
-  }
+  },
   "reservedRAM": {
     "home": 64
   }
