@@ -1,6 +1,6 @@
 /** @param {NS} ns **/
-import { TextTable, allServers } from "util.TextTable.js";
-
+import { TextTable } from "util.TextTable.js";
+import { allServers } from "util.js";
 const MAX_SIZE = 20;
 
 function ramToSize(ram){
