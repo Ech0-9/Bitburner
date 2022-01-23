@@ -13,6 +13,7 @@ export async function main(ns){
 		if(PSERV.curRam == PSERV.maxRam && PSERV.upgraded == 25){
 			ns.toast("MAX SERVER UPGRADES ACHIEVED!!", "success", 10000);
 			setConfig(ns, {"runLogisticsFN": true});
+			ns.exit();
 		}
 		if(PSERV.purchased < 25){
 			do{
