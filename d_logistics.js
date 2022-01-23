@@ -4,7 +4,6 @@ export async function main(ns){
 	const CONFIG = getConfig(ns);
 	const INTERVAL = CONFIG.interval;
 	const PSERV = getPserver(ns);
-	const port4 = ns.getPortHandle(4);
 	
 	let serv = "";
 	if(PSERV.curRam == PSERV.maxRam && PSERV.upgraded == 25){
