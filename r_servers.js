@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-import { TextTable } from "util.TextTable.js";
+import { TextTable, allServers } from "util.TextTable.js";
 
 const MAX_SIZE = 20;
 
@@ -18,17 +18,21 @@ function sizeToRam(size){
 }
 
 export async function main(ns) {
-  let report = ns.getPurchasedServers().map((h) => {
-    let ram = ns.getServerMaxRam(h);
-    let size = ramToSize(ram);
+  let s = allServers(ns, false);
+  let ps = ns.getPurchasedServers();
+  let fs = s.filter(f => {
+    if(ns.hasRootAccess(f) && ns.getServerRequiredHackingLevel(f) <= ns.getHackingLevel() && !ps.includes(f)){
+      return f;
+    }
+  });
+  let report = fs.map((h) => {
+   let money = ns.getServerMaxMoney(h);
     return [
-      h, ns.nFormat(ram*1024*1024*1024, "0ib"), size
+      h, money
     ]
-  }).sort((a,b) => {
-    return b.size - a.size;
   });
 
-  report.unshift(["Host", "RAM", "Size"])
+  report.unshift(["Host", "Money"])
 
   ns.tprint("\n"+TextTable(report, {hsep: "  |  "}))
 }
