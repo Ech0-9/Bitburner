@@ -32,8 +32,8 @@ const INSTALL_FILES = [
 
 const INSTALL_ALIAS = [
   `alias nuke="run NUKE.exe"`,
-  `alias priority="run u_set_priority.js --priority"`
-  `alias check-priority="run r_servers.js"`
+  `alias priority="run u_set_priority.js --priority"`,
+  `alias check-priority="run r_servers.js"`,
   `alias goto-plaid="run u_lud_speed.js"`,
   `alias start="run start.js"`,
   `alias editconf="nano config.json.txt"`,
