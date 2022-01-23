@@ -1,5 +1,5 @@
 const CONFIG_FILE = "config.json.txt";
-const PSERVER_FILE = "pservers.json.txt";
+const PSERVER_FILE = "pserver.json.txt";
 
 function dec2hex (dec) {
   return dec.toString(16).padStart(2, "0")
