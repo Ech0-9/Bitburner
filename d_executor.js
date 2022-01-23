@@ -52,7 +52,7 @@ export async function main(ns){
 		}
 		return hgwt - st;
 	
-}
+	}
 	while(true){
 		let primed = getConfig(ns).priority.primed;
 		let ptarget = getConfig(ns).priority.host;
@@ -117,5 +117,6 @@ export async function main(ns){
 				neededServers = [];	
 			}
 		}
+		await ns.sleep(250);
 	}
 }
