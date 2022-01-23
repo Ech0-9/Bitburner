@@ -1,4 +1,4 @@
-import {allServers, getConfig, setConfig, getPserver} from "util.js";
+import {allServers, getConfig, setConfig} from "util.js";
 
 export async function main(ns){
 	const ALL_SERVERS = allServers(ns,true);
@@ -60,7 +60,9 @@ export async function main(ns){
 				}
 						
 			}
-			if(cs != "") await ns.writePort(i, cs);
+			if(cs != ""){
+				await ns.writePort(i, cs);
+			}
 		}
 	}
 	while(true){
@@ -77,6 +79,7 @@ export async function main(ns){
 		}
 		
 		await serverPost(1);
+		await ns.sleep(100);
 		
 	}
 	
