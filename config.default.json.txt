@@ -6,7 +6,6 @@
     "host": "foodnstuff",
     "primed": false
   }
-  "runLogisticsFN": false,
   "reservedRAM": {
     "home": 64
   }
