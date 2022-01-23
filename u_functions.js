@@ -87,9 +87,10 @@ export function analyze(ns, pt, pb){
 		return a + b;
 	}
 	
+	let secDif = 0;
 	let gmul = 1 / (1 - per);
-	let target = pt.hostname;
-	let gprime = pt.maxMoney / pt.avaMoney;
+	let target = pt;
+	let gprime = ns.getServerMaxMoney(pt) / ns.getServerMoneyAvailable(pt);
 	//batch analysis section
 	let t1 = [];
 	let analysis = {};
@@ -115,9 +116,10 @@ export function analyze(ns, pt, pb){
 			};
 			break;
 		case "P":
+			secDif = ns.getServerSecurityLevel(pt) - ns.getServerMinSecurityLevel(pt);
 			t1 = [0,0];
-			t1[0] = Math.ceil(ns.growthAnalyze(target, gmul, 1));
-			t1[1] = Math.ceil((gst * t1[0]) / wst);
+			t1[0] = Math.ceil(ns.growthAnalyze(target, gprime, 1));
+			t1[1] = Math.ceil(((gst * t1[0]) + secDif) / wst);
 			let total = t1.reduce(sum, 0);
 			analysis = {
 				"hostname": target,
