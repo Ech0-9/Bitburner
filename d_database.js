@@ -32,7 +32,7 @@ export async function main(ns){
 			if(ns.hasRootAccess(s) && ns.getServerRequiredHackingLevel(s) <= ns.getHackingLevel()) return s;		
 		});
 	}
-	function serverPost(i){
+	async function serverPost(i){
 		while(ns.peek(i) == "NULL PORT DATA"){
 			let cs = "";
 			let found = false;
@@ -76,7 +76,7 @@ export async function main(ns){
 			clusterList = makeCluster(serverList);
 		}
 		
-		serverPost(1);
+		await serverPost(1);
 		
 	}
 	
