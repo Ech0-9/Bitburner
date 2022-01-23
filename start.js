@@ -1,12 +1,8 @@
 import { setConfig } from "util.js";
 
 export async function main(ns) {
-	const daemons = ["runLoadBalancer", "runAnalyzer", "runLogisticsST", "runBatcherLB", "runBatcherAZ", "runPrimerLB", "runPrimerAZ"];
-	for (let i = 0; i < daemons.length; i++) {
-		let d = daemons[i];
-		await setConfig(ns, { d: false });
-	}
-	await setConfig(ns, {"runLogisticsFN": false});
-	ns.run("d_central_brain.js", 1);
-
+	ns.run("d_database.js", 1);
+	ns.run("d_probe.js", 1);
+	ns.run("d_executor.js", 1);
+	ns.run("d_logistics.js", 1);
 }
