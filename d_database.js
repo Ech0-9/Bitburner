@@ -29,7 +29,7 @@ export async function main(ns){
 	}
 	function makeCluster(svs){
 		return svs.filter(s => {
-			if(ns.hasRootAccess(s) && ns.getServersRequiredHackingLevel(s) <= ns.getHackingLevel()) return s;		
+			if(ns.hasRootAccess(s) && ns.getServerRequiredHackingLevel(s) <= ns.getHackingLevel()) return s;		
 		});
 	}
 	function serverPost(i){
@@ -60,7 +60,7 @@ export async function main(ns){
 				}
 						
 			}
-			if(cs != "") ns.writePort(i, cs);
+			if(cs != "") await ns.writePort(i, cs);
 		}
 	}
 	while(true){
