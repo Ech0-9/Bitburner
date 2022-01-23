@@ -1,6 +1,6 @@
 const CONF_FILE_NAME = "config.json.txt";
 const PSERV_FILE_NAME = "pserver.json.txt";
-const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/v2";
+const BASE_URL = "https://raw.githubusercontent.com/Ech0-9/Bitburner/v3";
 const INSTALL_FILES = [
   "config.default.json.txt",
   "pserver.default.json.txt",
