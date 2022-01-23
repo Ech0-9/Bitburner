@@ -4,6 +4,7 @@
 	"baseRam": 8,
 	"curRam": 8,
 	"maxRam": 1048576,
+	"cost": 110000,
 	"power": 4,
 	"cycles": 3,
 	"prefix": "p-cloud",
