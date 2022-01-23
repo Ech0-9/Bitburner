@@ -1,10 +1,11 @@
 {
   "interval": 100,
   "percentage": 10,
-  "runProbe": true,
-  "runAnalyzer": false,
-  "runPrimer": false,
-  "runBatcher": false,
+  "oldPriority": "",
+  "priority": {
+    "host": "foodnstuff",
+    "primed": false
+  }
   "runLogisticsFN": false,
   "reservedRAM": {
     "home": 64
