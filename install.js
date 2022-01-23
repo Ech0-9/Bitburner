@@ -86,11 +86,11 @@ export async function main(ns){
   else{
     ns.tprint(`Could not find ${CONF_FILE_NAME}, using defaults.`)
   }
-   if(ns.fileExists(PSERV_FILE_NAME)){
+  if(ns.fileExists(PSERV_FILE_NAME)){
     existingConfig = JSON.parse(ns.read(PSERV_FILE_NAME));
   }
   else{
-	  existingPserv = ns.tprint(`Could not find ${PSERV_FILE_NAME}, using defaults.`)
+    ns.tprint(`Could not find ${PSERV_FILE_NAME}, using defaults.`)
   }
   let config = merge(defaultConfig, {});
   config = merge(existingConfig, config);
