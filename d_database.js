@@ -34,13 +34,32 @@ export async function main(ns){
 	}
 	function serverPost(i){
 		while(ns.peek(i) == "NULL PORT DATA"){
-			ns.writePort(i, clusterList[serverIndex]);
-			if(serverIndex + 1 != clusterList.length){
-				serverIndex++;
+			let cs = "";
+			let found = false;
+			while(!found){
+				if(threads(clusterList[serverIndex]) > 0){
+					if(serverIndex + 1 != clusterList.length){
+						cs = clusterList[serverIndex];
+						serverIndex++;
+						found = true;	
+					}
+					else{
+						cs = clusterList[serverIndex];
+						serverIndex = 0;
+						found = true;
+					}
+				}
+				else{
+					if(serverIndex + 1 != clusterList.length){
+						serverIndex++;	
+					}
+					else{
+						serverIndex = 0;
+					}
+				}
+						
 			}
-			else{
-				serverIndex = 0;
-			}
+			ns.writePort(i, cs);
 		}
 	}
 	while(true){
