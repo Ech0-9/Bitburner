@@ -55,11 +55,12 @@ export async function main(ns){
 					}
 					else{
 						serverIndex = 0;
+						break;
 					}
 				}
 						
 			}
-			ns.writePort(i, cs);
+			if(cs != "") ns.writePort(i, cs);
 		}
 	}
 	while(true){
@@ -70,14 +71,12 @@ export async function main(ns){
 			await setConfig(ns, {"oldPriority": ptarget});
 		}
 		//servers refresh every cycle through of the current cluster loops
-		if(cycle > clusterList.length){
+		if(serverIndex == 0){
 			serverList = allServers(ns, true);
 			clusterList = makeCluster(serverList);
-			cycle = 0;
 		}
 		
 		serverPost(1);
-		cycle++;
 		
 	}
 	
