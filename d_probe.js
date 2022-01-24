@@ -2,7 +2,7 @@ import { allServers } from "util.js";
 
 export async function main(ns) {
 	//home not included in allservers search. will add after dynamic calculations are over. line 54.
-	const ALL_SERVERS = allServers(ns, false);
+	//const ALL_SERVERS = allServers(ns, false);
 	const EXECUTABLES = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
 	//clears ports on start up. Probe will always start first
 	//kill all scripts befor starting probe back up if it is killed for some reason
@@ -44,6 +44,9 @@ export async function main(ns) {
 				}
 				if(ns.getServerNumPortsRequired(servers[i]) <= availableExe.length){
 					ns.nuke(servers[i]);
+					await ns.scp("t_extract.js", servers[i]);
+					await ns.scp("t_engorge.js", servers[i]);
+					await ns.scp("t_enfeeble.js", servers[i]);
 				}
 			}
 		}
