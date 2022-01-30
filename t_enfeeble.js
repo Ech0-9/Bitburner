@@ -5,5 +5,9 @@ export async function main(ns){
 		["delay", ""],
 		["id", -1]
 	]);
-	await ns.weaken(f.target);
+	let target = "";
+	while(true){
+		target = ns.read("TARGET.txt");
+		await ns.weaken(target);
+	}
 }
