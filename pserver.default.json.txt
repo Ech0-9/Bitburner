@@ -1,12 +1,12 @@
 {
 	"purchased": 0,
 	"upgraded": 0,
-	"baseRam": 8,
-	"curRam": 8,
+	"baseRam": 128,
+	"curRam": 128,
 	"maxRam": 1048576,
-	"cost": 110000,
-	"power": 4,
-	"cycles": 3,
+	"cost": 7040000,
+	"power": 8,
+	"cycles": 7,
 	"prefix": "p-cloud",
 	"preIndex": 1
 }
