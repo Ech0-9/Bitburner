@@ -28,8 +28,8 @@ export async function main(ns){
 				await setPserver(ns, {"curRam": Math.pow(2, PSERV.power)}); 
 				await setPserver(ns, {"power": PSERV.power + 1});
 				await setPserver(ns, {"purchased": PSERV.purchased + 1});
-				await setPserver(ns, {"preIndex": PSERV.preIndex + 1});
-				await setPserver(ns, {"preIndex": 0});
+				//await setPserver(ns, {"preIndex": PSERV.preIndex + 1});
+				await setPserver(ns, {"preIndex": 1});
 			}
 			else{
 				await setPserver(ns, {"purchased": PSERV.purchased + 1});
@@ -37,9 +37,7 @@ export async function main(ns){
 			}
 		}
 		else{
-			while(ns.getServerUsedRam(`${PSERV.prefix}-${PSERV.preIndex}`) != 0){
-				await ns.sleep(10000);
-			}
+			ns.killall(`${PSERV.prefix}-${PSERV.preIndex}`);
 			ns.deleteServer(`${PSERV.prefix}-${PSERV.preIndex}`);
 			do{
 				serv = ns.purchaseServer(`${PSERV.prefix}-${PSERV.preIndex}`, PSERV.curRam);
@@ -51,10 +49,11 @@ export async function main(ns){
 			await ns.scp("t_extract.js", "home", serv);
 			if(PSERV.upgraded + 1 == 25){
 				await setPserver(ns, {"curRam": Math.pow(2, PSERV.power)}); 
-				await setPserver(ns, {"upgraded": PSERV.upgraded + 1});
-				await serPserver(ns, {"preIndex": PSERV.preIndex + 1});
-				await setPserver(ns, {"preIndex": 0});
 				await setPserver(ns, {"power": PSERV.power + 1});
+				await setPserver(ns, {"upgraded": PSERV.upgraded + 1});
+				//await serPserver(ns, {"preIndex": PSERV.preIndex + 1});
+				await setPserver(ns, {"preIndex": 0});
+				
 			}
 			else{
 				await setPserver(ns, {"purchased": PSERV.upgraded + 1});
