@@ -28,24 +28,9 @@ export async function main(ns){
 			await ns.sleep(INTERVAL);
 		}
 	}
-	async function primeToMin(host){
+	async function primeToMin(host, at){
 		let arrArgs = ["--host", host, "--batchNum", 1, "--id", 1];
-		let hts = Math.floor(ns.getServerMaxRam(host) / 1.75);
-		let cur = ns.getServerSecurityLevel(host);
-		let min = ns.getServerMinSecurityLevel(host);
-		let nts = Math.ceil((cur - min) / 0.05);
-		let ts = hts - nts;
-		let wt = ns.getWeakenTime(host);
-		if(ts >= 0){
-			ns.exec("t_enfeeble.js", host, hts, ...arrArgs);
-			await ns.sleep(wt + (4 * INTERVAL));
-		}
-		else{
-			ns.exec("t_enfeeble.js", host, hts, ...arrArgs);
-			await ns.sleep(wt + (4 * INTERVAL));
-			await primeToMin(ns, host);
-		}
-		
+		ns.exec("t_enfeeble.js", host, at, ...arrArgs);	
 	}
 	async function prime(num, host) {
 		let arrArgs = [];
@@ -75,26 +60,25 @@ export async function main(ns){
 			let min = ns.getServerMinSecurityLevel(ptargets[i]);
 			let maxMon = ns.getServerMaxMoney(ptargets[i]);
 			let curMon = ns.getServerMoneyAvailable(ptargets[i]);
-			
-			if(cur != min){
-				if(pservers[i] != "home"){
-					ns.killAll(pservers[i]);				
-					aRam = ns.getServerMaxRam(pservers[i]);
-				}
-				else{
-					aRam = ns.getServerMaxRam(pservers[i]) - ns.getServerUsedRam(pservers[i]) - reserved;
-				}
-				let num = Math.ceil(aRam / 24);
-				primeToMin(pservers[i]);
+			if(pservers[i] != "home"){
+				//ns.killAll(pservers[i]);
+				aRam = ns.getServerMaxRam(pservers[i]);
 			}
-			else if(maxMon != curMon && !ns.scriptRunning("t_enfeeble.js", pservers[i])){
-				if(pservers[i] != "home"){				
-					aRam = ns.getServerMaxRam(pservers[i]);
+			else{
+				aRam = ns.getServerMaxRam(pservers[i]) - ns.getServerUsedRam(pservers[i]) - reserved;
+			}
+			let avat = 0;
+			
+			if(cur != min && !ns.scriptRunning("t_extract.js", pservers[i])){
+				if(pservers[i] != "home"){
+					ns.killAll(pservers[i]);
 				}
-				else{
-					aRam = ns.getServerMaxRam(pservers[i]) - ns.getServerUsedRam(pservers[i]) - reserved;
-				}
+				avat = Math.floor(aRam / wr);
+				primeToMin(pservers[i], avat);
+			}
+			else if(maxMon != curMon && !ns.scriptRunning("t_extract.js", pservers[i])){
 				let num = Math.ceil(aRam / 24);	
+				prime
 			}
 			else if(!ns.scriptRunning("t_extract.js", pservers[i])){
 				
