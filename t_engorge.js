@@ -3,7 +3,7 @@ import {getConfig} from "util.js";
 export async function main(ns){
 	const f = ns.flags([
 		["host", ""],
-		["batchNum", 0],
+		["batchNum", 1],
 		["id", -1]
 	]);
 	const INTERVAL = getConfig(ns).interval;
