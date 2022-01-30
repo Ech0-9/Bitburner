@@ -13,4 +13,5 @@ export async function main(ns){
 		delay = ns.getWeakenTime(target) - ns.getGrowTime(target) - TDIF;
 		await ns.sleep(delay);
 		await ns.grow(target);
+	}
 }
