@@ -5,6 +5,12 @@ export async function main(ns){
 		["delay", ""],
 		["id", -1]
 	]);
-	await ns.sleep(f.delay);
-	await ns.grow(f.target);
+	const TDIF = 200;
+	let target = "";
+	let delay = 0;
+	while(true){
+		target = ns.read("TARGET.txt");
+		delay = ns.getWeakenTime(target) - ns.getGrowTime(target) - TDIF;
+		await ns.sleep(delay);
+		await ns.grow(target);
 }
